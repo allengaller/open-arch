@@ -132,7 +132,7 @@ MVP 三个技能包：
 | 变量 | 必填 | 默认 | 说明 |
 |---|---|---|---|
 | `DASHSCOPE_API_KEY` | 是 | — | 模型访问凭证 |
-| `OPENARCH_MODEL` | 否 | Qwen 旗舰模型 | 任意 OpenAI 兼容模型名 |
+| `OPENARCH_MODEL` | 否 | `qwen-max` | 任意 OpenAI 兼容模型名 |
 | `OPENARCH_BASE_URL` | 否 | DashScope 兼容端点 | 换第三方端点用 |
 | `OPENARCH_WORKSPACE` | 否 | `./deliverables` | 交付物输出目录 |
 
