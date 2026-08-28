@@ -13,5 +13,6 @@ jobs:
         with:
           python-version: "3.11"
       - run: uv sync
+      - run: uv lock --check
       - run: uv run ruff check src tests
       - run: uv run pytest -m "not e2e" -v

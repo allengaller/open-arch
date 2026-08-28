@@ -1,0 +1,13 @@
+.git
+.venv
+__pycache__
+*.py[cod]
+.pytest_cache
+.ruff_cache
+.impeccable
+docs
+deliverables
+dist
+.env*
+vibe_images
+.github
