@@ -1,4 +1,4 @@
-from openarch.tools.mermaid import validate_mermaid
+from openarch.tools.mermaid import parse_flowchart, validate_mermaid
 
 VALID = """flowchart TD
   web[Web 前端] --> slb[SLB]
@@ -35,3 +35,13 @@ def test_edge_creates_implicit_node():
     fc = parse_flowchart("flowchart LR\n  a --> b")
     assert fc.nodes["b"].text == ""
     assert fc.edges[0].src == "a" and fc.edges[0].dst == "b"
+
+
+def test_bare_reference_keeps_existing_label():
+    fc = parse_flowchart("flowchart TD\n  a[Web]\n  a\n")
+    assert fc.nodes["a"].text == "Web"
+
+
+def test_edge_directedness():
+    fc = parse_flowchart("flowchart TD\n  a --- b\n  c ---> d\n")
+    assert [e.directed for e in fc.edges] == [False, True]

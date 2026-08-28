@@ -20,6 +20,7 @@ _EDGE_RE = re.compile(
     r"^\s*(?P<src>" + _NODE_ATOM + r")\s*(?P<arrow>-{2,3}>|---)\s*"
     r"(?:\|(?P<label>[^|]*)\|\s*)?(?P<dst>" + _NODE_ATOM + r")\s*$"
 )
+_HEADER_RE = re.compile(r"^flowchart\s+(\S+)\s*$")
 
 
 @dataclass
@@ -84,7 +85,7 @@ def parse_flowchart(text: str) -> Flowchart:
         line = raw.strip()
         if not line or line.startswith("%%"):
             continue
-        header = re.match(r"^flowchart\s+(\S+)\s*$", line)
+        header = _HEADER_RE.match(line)
         if header:
             fc.direction = header.group(1)
             continue
@@ -105,8 +106,7 @@ def parse_flowchart(text: str) -> Flowchart:
             continue
         n = _NODE_RE.match(line)
         if n:
-            node = _node_from_match(n)
-            fc.nodes[node.id] = node
+            _register_endpoint(fc, _node_from_match(n))
     return fc
 
 
@@ -114,12 +114,12 @@ def validate_mermaid(text: str) -> ValidationResult:
     errors: list[str] = []
     lines = text.splitlines()
     header_idx = next(
-        (i for i, ln in enumerate(lines) if ln.strip().startswith("flowchart")), None
+        (i for i, ln in enumerate(lines) if _HEADER_RE.match(ln.strip())), None
     )
     if header_idx is None:
         errors.append("第 1 行附近：缺少 `flowchart <方向>` 头，例如 `flowchart TD`")
     else:
-        m = re.match(r"^flowchart\s+(\S+)\s*$", lines[header_idx].strip())
+        m = _HEADER_RE.match(lines[header_idx].strip())
         if not m or m.group(1) not in _DIRECTIONS:
             errors.append(
                 f"第 {header_idx + 1} 行：`flowchart` 方向必须是 {'/'.join(sorted(_DIRECTIONS))}"
