@@ -64,3 +64,14 @@ async def test_all_pass_gives_full_scores_and_no_risks():
     )
     assert all(s["score"] == 1.0 for s in out["pillar_scores"].values())
     assert out["high_risks"] == []
+
+
+async def test_missing_checklist_returns_structured_error():
+    tool = ReviewWithWafTool(checklist_path=Path("/nonexistent/checklist.yaml"))
+    out = json.loads(
+        (
+            await tool(architecture_summary="x", findings=_all_findings())
+        ).content[0].text
+    )
+    assert "error" in out
+    assert "WAF 清单未找到" in out["error"][0]

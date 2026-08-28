@@ -67,7 +67,26 @@ class ReviewWithWafTool(OpenArchTool):
             self._checklist = load_checklist(self._checklist_path)
 
     async def call(self, architecture_summary: str, findings: list[dict]) -> ToolChunk:
-        self._ensure_checklist()
+        try:
+            self._ensure_checklist()
+        except FileNotFoundError:
+            return ToolChunk(
+                content=[
+                    TextBlock(
+                        text=json.dumps(
+                            {
+                                "error": [
+                                    (
+                                        f"WAF 清单未找到: {self._checklist_path}，"
+                                        "请检查 OPENARCH_SKILLS_DIR 下 aliyun-waf 技能包"
+                                    )
+                                ]
+                            },
+                            ensure_ascii=False,
+                        )
+                    )
+                ]
+            )
         all_ids = {it["id"]: p for p, items in self._checklist.items() for it in items}
         errors: list[str] = []
         seen: set[str] = set()
