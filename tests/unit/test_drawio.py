@@ -21,3 +21,7 @@ def test_edge_labels_present():
         parse_flowchart("flowchart TD\n  a -->|主库| b"), title="t"
     )
     assert "主库" in xml
+
+def test_cyclic_input_terminates():
+    xml = flowchart_to_drawio(parse_flowchart("flowchart TD\n  a --> b\n  b --> a\n"), "t")
+    assert xml.count('vertex="1"') == 2

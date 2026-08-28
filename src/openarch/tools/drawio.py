@@ -1,3 +1,4 @@
+"""Mermaid Flowchart → draw.io (mxGraph) XML 转换（纯逻辑，供 export_drawio 工具复用）。"""
 from __future__ import annotations
 
 import html
