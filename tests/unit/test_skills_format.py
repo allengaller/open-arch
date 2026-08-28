@@ -18,3 +18,13 @@ def test_every_skill_has_valid_frontmatter():
         assert meta["name"] == skill_dir.name, skill_dir.name
         assert len(meta["description"]) > 10
     assert found == EXPECTED
+
+
+def test_referenced_content_files_exist():
+    expected_content = {
+        "arch-design": {"content/patterns.md", "content/decision-tree.md"},
+        "sa-playbooks": {"content/cloud-assessment.md", "content/cost-optimization.md"},
+    }
+    for name, files in expected_content.items():
+        for rel in files:
+            assert (SKILLS_DIR / name / rel).exists(), f"{name}/{rel}"

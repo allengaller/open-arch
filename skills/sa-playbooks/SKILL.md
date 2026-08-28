@@ -10,4 +10,4 @@ description: SA 交付 playbook：上云评估与成本优化两个标准交付�
 - `content/cloud-assessment.md`：上云评估（从 0 到 1 或从 IDC 迁移）
 - `content/cost-optimization.md`：云上成本优化（存量账单优化）
 
-每个 playbook 产出物统一用 `export_deliverable` 打包交付。
+每个 playbook 产出物统一用 `export_deliverable` 打包交付；未执行 WAF 评审或无架构图变更时，对应参数传说明文字（如"本次未做 WAF 评审"）。

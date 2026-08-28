@@ -7,7 +7,7 @@ description: 阿里云 Well-Architected Framework 五支柱检查清单：架构
 
 对已完成初稿的架构方案执行评审：
 
-1. 用 `review_with_waf` 工具的清单（`skills/aliyun-waf/checklist.yaml`）逐项对照方案：
+1. 用 `review_with_waf` 工具的清单（本技能目录下的 checklist.yaml）逐项对照方案：
    - **pass**：方案已明确覆盖，写明 evidence（方案中的对应设计）
    - **risk**：部分覆盖或依赖假设，写 evidence + recommendation
    - **fail**：完全未覆盖，写 evidence（缺失说明）+ recommendation
