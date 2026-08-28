@@ -30,6 +30,7 @@ packages = ["src/openarch"]
 
 [tool.pytest.ini_options]
 asyncio_mode = "auto"
+pythonpath = ["src"]
 markers = [
     "e2e: end-to-end tests requiring a real API key",
 ]
