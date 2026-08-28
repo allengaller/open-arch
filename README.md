@@ -32,7 +32,8 @@ Docker：
 |---|---|---|---|
 | `DASHSCOPE_API_KEY` | 是* | — | DashScope 凭证（*用 `OPENARCH_BASE_URL` 时可换） |
 | `OPENARCH_MODEL` | 否 | `qwen-max` | 模型名 |
-| `OPENARCH_BASE_URL` | 否 | — | OpenAI 兼容端点（需配 `OPENARCH_API_KEY`） |
+| `OPENARCH_BASE_URL` | 否 | — | OpenAI 兼容端点（设置后走该端点而非 DashScope） |
+| `OPENARCH_API_KEY` | 条件 | — | OpenAI 兼容端点的凭证（设置了 `OPENARCH_BASE_URL` 时必填） |
 | `OPENARCH_WORKSPACE` | 否 | `./deliverables` | 交付物输出目录 |
 | `OPENARCH_SKILLS_DIR` | 否 | 仓库根 `skills/` | 技能目录覆盖 |
 

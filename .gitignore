@@ -6,3 +6,4 @@ deliverables/
 .pytest_cache/
 .ruff_cache/
 dist/
+.impeccable/
