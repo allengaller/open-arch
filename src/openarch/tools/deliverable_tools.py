@@ -19,6 +19,15 @@ def _slugify(text: str) -> str:
     return (slug or "deliverable")[:40]
 
 
+def _strip_mermaid_fence(code: str) -> str:
+    lines = code.strip().splitlines()
+    if lines and lines[0].strip().startswith("```"):
+        lines = lines[1:]
+    if lines and lines[-1].strip() == "```":
+        lines = lines[:-1]
+    return "\n".join(lines)
+
+
 class ExportDeliverableTool(OpenArchTool):
     name = "export_deliverable"
     description = (
@@ -65,13 +74,15 @@ class ExportDeliverableTool(OpenArchTool):
         mermaid_code: str,
         waf_review_json: str,
     ) -> ToolChunk:
-        ts = datetime.now().astimezone().strftime("%Y%m%d-%H%M%S")
+        mermaid_code = _strip_mermaid_fence(mermaid_code)
+        now = datetime.now().astimezone()
+        ts = now.strftime("%Y%m%d-%H%M%S")
         path = self._workspace / f"{ts}-{_slugify(title)}.md"
         path.parent.mkdir(parents=True, exist_ok=True)
-        generated_at = datetime.now().astimezone().strftime("%Y-%m-%d %H:%M:%S")
+        h1_title = title.replace("\n", " ")
         path.write_text(
-            f"# {title}\n\n"
-            f"> 由 OpenArch 生成于 {generated_at}\n\n"
+            f"# {h1_title}\n\n"
+            f"> 由 OpenArch 生成于 {now.strftime('%Y-%m-%d %H:%M:%S')}\n\n"
             "## 需求卡\n\n```json\n"
             f"{self._pretty(requirements_card_json)}\n```\n\n"
             "## 架构方案\n\n"

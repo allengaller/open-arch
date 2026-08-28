@@ -1,4 +1,5 @@
 import json
+from pathlib import Path
 
 from openarch.tools.deliverable_tools import ExportDeliverableTool
 
@@ -44,3 +45,26 @@ async def test_filename_is_timestamped(tmp_path):
         ).content[0].text
     )
     assert out["file"].endswith(".md") and "-" in out["file"]
+
+
+async def test_pretty_json_and_relative_path(tmp_path):
+    tool = ExportDeliverableTool(workspace=tmp_path)
+    out = json.loads(
+        (
+            await tool(
+                title="方案\nB",
+                requirements_card_json='{"card": {"a": 1}}',
+                solution_markdown="s",
+                mermaid_code="```mermaid\nflowchart TD\n  a --> b\n```",
+                waf_review_json="not-json",
+            )
+        ).content[0].text
+    )
+    path = tmp_path / out["file"]
+    text = path.read_text(encoding="utf-8")
+    assert not Path(out["file"]).is_absolute()
+    assert '\n  "card"' in text          # pretty-printed JSON
+    assert "not-json" in text            # raw fallback
+    assert "flowchart TD" in text        # fence stripped and re-wrapped
+    assert "```mermaid\nflowchart" in text
+    assert "方案 B" in text              # title newline sanitized in H1
