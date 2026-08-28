@@ -38,17 +38,26 @@ class StructureRequirementsTool(OpenArchTool):
     name = "structure_requirements"
     description = (
         "把从对话中提炼的需求整理为结构化需求卡。business_scenario 必填；"
-        "其余字段未从用户处获得时不要编造，留空并用 missing_fields 主动追问。"
+        "其余字段未从用户处获得时不要编造：省略该参数或传 null，并用 missing_fields 主动追问。"
     )
     input_schema: ClassVar[dict] = {
         "type": "object",
         "properties": {
-            "business_scenario": {"type": "string"},
-            "scale": {"type": ["string", "null"]},
-            "availability_target": {"type": ["string", "null"]},
-            "budget_range": {"type": ["string", "null"]},
-            "compliance": {"type": ["string", "null"]},
-            "existing_systems": {"type": ["string", "null"]},
+            "business_scenario": {
+                "type": "string",
+                "description": "业务场景（必填）",
+            },
+            "scale": {"type": ["string", "null"], "description": "规模/并发/数据量"},
+            "availability_target": {
+                "type": ["string", "null"],
+                "description": "可用性目标",
+            },
+            "budget_range": {"type": ["string", "null"], "description": "预算区间"},
+            "compliance": {"type": ["string", "null"], "description": "合规约束"},
+            "existing_systems": {
+                "type": ["string", "null"],
+                "description": "现有系统",
+            },
         },
         "required": ["business_scenario"],
     }

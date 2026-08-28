@@ -27,3 +27,12 @@ async def test_partial_card_lists_missing():
     tool = StructureRequirementsTool()
     out = json.loads((await tool(business_scenario="数据平台")).content[0].text)
     assert out["missing_fields"] == OPTIONAL
+
+
+async def test_registers_into_real_toolkit():
+    from agentscope.tool import Toolkit
+
+    toolkit = Toolkit(tools=[StructureRequirementsTool()])
+    schemas = await toolkit.get_tool_schemas()
+    fn = {s["function"]["name"]: s["function"] for s in schemas}["structure_requirements"]
+    assert fn["parameters"]["properties"]["scale"]["description"] == "规模/并发/数据量"
