@@ -97,7 +97,7 @@ open-arch/
 
 ```
 skills/<skill-name>/
-├── SKILL.md        # 必需：frontmatter（name、description、version）+ 使用说明
+├── SKILL.md        # 必需：frontmatter（name、description；version 等扩展字段可选）+ 使用说明
 ├── content/        # 知识正文（Markdown，可多文件）
 └── templates/      # 可选：交付物模板
 ```
