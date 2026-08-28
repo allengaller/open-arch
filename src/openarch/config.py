@@ -39,9 +39,9 @@ def load_settings(env: dict[str, str] | None = None) -> Settings:
             " DASHSCOPE_API_KEY（见 README「配置」一节）。"
         )
 
-    workspace = Path(e.get("OPENARCH_WORKSPACE") or "./deliverables").resolve()
+    workspace = Path(e.get("OPENARCH_WORKSPACE") or "./deliverables").expanduser().resolve()
     default_skills = Path(__file__).resolve().parents[2] / "skills"
-    skills_dir = Path(e.get("OPENARCH_SKILLS_DIR") or default_skills).resolve()
+    skills_dir = Path(e.get("OPENARCH_SKILLS_DIR") or default_skills).expanduser().resolve()
 
     return Settings(
         dashscope_api_key=dashscope_key,
