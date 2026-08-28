@@ -14,7 +14,7 @@
 
 ## 快速开始
 
-    git clone https://github.com/<you>/open-arch.git && cd open-arch
+    git clone https://github.com/allengaller/open-arch.git && cd open-arch
     uv sync
     cp .env.example .env        # 填入 DASHSCOPE_API_KEY
     uv run openarch
