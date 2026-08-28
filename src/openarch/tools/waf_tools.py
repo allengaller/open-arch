@@ -106,7 +106,7 @@ class ReviewWithWafTool(OpenArchTool):
                             "pillar": pillar,
                             "description": it["description"],
                             "status": f["status"],
-                            "evidence": f["evidence"],
+                            "evidence": f.get("evidence", ""),
                             "recommendation": f.get("recommendation", ""),
                         }
                     )

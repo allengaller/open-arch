@@ -50,3 +50,17 @@ async def test_unknown_and_missing_items_rejected():
         ).content[0].text
     )
     assert "error" in out
+
+
+async def test_all_pass_gives_full_scores_and_no_risks():
+    tool = ReviewWithWafTool(checklist_path=CHECKLIST)
+    findings = [
+        {"item_id": it["id"], "status": "pass", "evidence": "覆盖"}
+        for items in load_checklist(CHECKLIST).values()
+        for it in items
+    ]
+    out = json.loads(
+        (await tool(architecture_summary="x", findings=findings)).content[0].text
+    )
+    assert all(s["score"] == 1.0 for s in out["pillar_scores"].values())
+    assert out["high_risks"] == []
