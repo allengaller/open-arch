@@ -58,9 +58,16 @@ class ReviewWithWafTool(OpenArchTool):
     is_read_only = True
 
     def __init__(self, checklist_path: Path):
-        self._checklist = load_checklist(checklist_path)
+        # 清单延迟到首次调用时加载：Agent 装配不应强依赖某个技能包是否已落盘
+        self._checklist_path = checklist_path
+        self._checklist: dict[str, list[dict]] | None = None
+
+    def _ensure_checklist(self) -> None:
+        if self._checklist is None:
+            self._checklist = load_checklist(self._checklist_path)
 
     async def call(self, architecture_summary: str, findings: list[dict]) -> ToolChunk:
+        self._ensure_checklist()
         all_ids = {it["id"]: p for p, items in self._checklist.items() for it in items}
         errors: list[str] = []
         seen: set[str] = set()
