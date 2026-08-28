@@ -92,5 +92,12 @@ class ExportDrawioTool(OpenArchTool):
             encoding="utf-8",
         )
         return ToolChunk(
-            content=[TextBlock(text=json.dumps({"file": path.name}, ensure_ascii=False))]
+            content=[
+                TextBlock(
+                    text=json.dumps(
+                        {"file": str(path.relative_to(self._workspace))},
+                        ensure_ascii=False,
+                    )
+                )
+            ]
         )
