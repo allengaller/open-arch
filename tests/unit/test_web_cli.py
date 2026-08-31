@@ -18,3 +18,11 @@ def test_parse_args_web_defaults():
     assert args.command == "web"
     assert args.host is None
     assert args.port is None
+
+
+def test_parse_args_web_rejects_non_int_port():
+    import pytest
+
+    with pytest.raises(SystemExit) as excinfo:
+        parse_args(["web", "--port", "abc"])
+    assert excinfo.value.code == 2

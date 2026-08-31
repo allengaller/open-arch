@@ -29,8 +29,9 @@ def _run_web(settings: Settings, host: str | None, port: int | None) -> None:
     from openarch.web.app import create_web_app, find_static_dir
     from openarch.web.bootstrap import run_bootstrap
 
-    host = host or settings.web_host
-    port = port or settings.web_port
+    # 显式传 0（uvicorn 随机端口）等合法 falsy 值不应被吞掉回落 settings。
+    host = host if host is not None else settings.web_host
+    port = port if port is not None else settings.web_port
     asyncio.run(run_bootstrap(settings))
     if find_static_dir() is None:
         print(
