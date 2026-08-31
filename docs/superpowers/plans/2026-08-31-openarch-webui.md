@@ -25,11 +25,11 @@
 
 **Files:**
 - Modify: `src/openarch/config.py`
-- Test: `tests/test_web_config.py`
+- Test: `tests/unit/test_web_config.py`
 
 - [ ] **Step 1: 写失败测试**
 
-创建 `tests/test_web_config.py`：
+创建 `tests/unit/test_web_config.py`：
 
 ```python
 from pathlib import Path
@@ -61,7 +61,7 @@ def test_web_env_overrides(tmp_path):
 
 - [ ] **Step 2: 运行确认失败**
 
-Run: `uv run pytest tests/test_web_config.py -q`
+Run: `uv run pytest tests/unit/test_web_config.py -q`
 Expected: FAIL — `Settings` 无 `db/web_host/web_port` 属性（`AttributeError`）。
 
 - [ ] **Step 3: 实现**
@@ -112,13 +112,13 @@ class Settings:
 
 - [ ] **Step 4: 运行确认通过（含既有配置测试回归）**
 
-Run: `uv run pytest tests/test_web_config.py tests/test_config.py -q`
+Run: `uv run pytest tests/unit/test_web_config.py tests/unit/test_config.py -q`
 Expected: 全部 PASS。
 
 - [ ] **Step 5: 提交**
 
 ```bash
-git add src/openarch/config.py tests/test_web_config.py
+git add src/openarch/config.py tests/unit/test_web_config.py
 git commit -m "feat(config): 新增 OPENARCH_DB/HOST/PORT 与 Web 工作区根派生"
 ```
 
@@ -183,11 +183,11 @@ git commit -m "build: 切到 agentscope[service,storage-sql] extras + aiosqlite"
 **Files:**
 - Create: `src/openarch/web/__init__.py`（空文件）
 - Create: `src/openarch/web/bootstrap.py`
-- Test: `tests/test_web_bootstrap.py`
+- Test: `tests/unit/test_web_bootstrap.py`
 
 - [ ] **Step 1: 写失败测试**
 
-创建 `tests/test_web_bootstrap.py`：
+创建 `tests/unit/test_web_bootstrap.py`：
 
 ```python
 from openarch.agent import SYSTEM_PROMPT
@@ -247,7 +247,7 @@ async def test_bootstrap_openai_compat_mode(tmp_path):
 
 - [ ] **Step 2: 运行确认失败**
 
-Run: `uv run pytest tests/test_web_bootstrap.py -q`
+Run: `uv run pytest tests/unit/test_web_bootstrap.py -q`
 Expected: FAIL — `ModuleNotFoundError: No module named 'openarch.web'`。
 
 - [ ] **Step 3: 实现**
@@ -330,14 +330,14 @@ async def _seed_agent(storage: AsyncSQLAlchemyStorage) -> str:
 
 - [ ] **Step 4: 运行确认通过**
 
-Run: `uv run pytest tests/test_web_bootstrap.py -q`
+Run: `uv run pytest tests/unit/test_web_bootstrap.py -q`
 Expected: 3 PASS。若报 `ImportError: cannot import name 'ContextConfig' from 'agentscope.agent'`，改为 `from agentscope.agent._config import ContextConfig, ReActConfig` 并同步修正。
 
 - [ ] **Step 5: 全量回归 + 提交**
 
 ```bash
 uv run pytest -m "not e2e" -q
-git add src/openarch/web/__init__.py src/openarch/web/bootstrap.py tests/test_web_bootstrap.py
+git add src/openarch/web/__init__.py src/openarch/web/bootstrap.py tests/unit/test_web_bootstrap.py
 git commit -m "feat(web): bootstrap 幂等种子凭证与 agent 记录"
 ```
 
@@ -347,11 +347,11 @@ git commit -m "feat(web): bootstrap 幂等种子凭证与 agent 记录"
 
 **Files:**
 - Create: `src/openarch/web/tools_factory.py`
-- Test: `tests/test_web_tools_factory.py`
+- Test: `tests/unit/test_web_tools_factory.py`
 
 - [ ] **Step 1: 写失败测试**
 
-创建 `tests/test_web_tools_factory.py`：
+创建 `tests/unit/test_web_tools_factory.py`：
 
 ```python
 from pathlib import Path
@@ -390,7 +390,7 @@ async def test_factory_binds_session_workdir(tmp_path):
 
 - [ ] **Step 2: 运行确认失败**
 
-Run: `uv run pytest tests/test_web_tools_factory.py -q`
+Run: `uv run pytest tests/unit/test_web_tools_factory.py -q`
 Expected: FAIL — `ModuleNotFoundError: No module named 'openarch.web.tools_factory'`。
 
 - [ ] **Step 3: 实现**
@@ -443,13 +443,13 @@ def make_openarch_tools(
 
 - [ ] **Step 4: 运行确认通过**
 
-Run: `uv run pytest tests/test_web_tools_factory.py -q`
+Run: `uv run pytest tests/unit/test_web_tools_factory.py -q`
 Expected: PASS。
 
 - [ ] **Step 5: 提交**
 
 ```bash
-git add src/openarch/web/tools_factory.py tests/test_web_tools_factory.py
+git add src/openarch/web/tools_factory.py tests/unit/test_web_tools_factory.py
 git commit -m "feat(web): extra_agent_tools 工厂把五件套工具绑到会话工作区"
 ```
 
@@ -459,11 +459,11 @@ git commit -m "feat(web): extra_agent_tools 工厂把五件套工具绑到会话
 
 **Files:**
 - Create: `src/openarch/web/app.py`
-- Test: `tests/test_web_app.py`
+- Test: `tests/unit/test_web_app.py`
 
 - [ ] **Step 1: 写失败测试**
 
-创建 `tests/test_web_app.py`：
+创建 `tests/unit/test_web_app.py`：
 
 ```python
 from fastapi.testclient import TestClient
@@ -502,7 +502,7 @@ def test_static_mount_when_dist_exists(tmp_path, monkeypatch):
 
 - [ ] **Step 2: 运行确认失败**
 
-Run: `uv run pytest tests/test_web_app.py -q`
+Run: `uv run pytest tests/unit/test_web_app.py -q`
 Expected: FAIL — `ModuleNotFoundError: No module named 'openarch.web.app'`。
 
 - [ ] **Step 3: 实现**
@@ -574,13 +574,13 @@ def create_web_app(settings: Settings) -> FastAPI:
 
 - [ ] **Step 4: 运行确认通过**
 
-Run: `uv run pytest tests/test_web_app.py -q`
+Run: `uv run pytest tests/unit/test_web_app.py -q`
 Expected: 2 PASS。（`find_static_dir` 会探测仓库根 `webui/dist`——本地未构建前端时返回 None，不影响测试。）
 
 - [ ] **Step 5: 提交**
 
 ```bash
-git add src/openarch/web/app.py tests/test_web_app.py
+git add src/openarch/web/app.py tests/unit/test_web_app.py
 git commit -m "feat(web): create_web_app 装配 Agent Service + /openarch/config + 静态托管"
 ```
 
@@ -590,11 +590,11 @@ git commit -m "feat(web): create_web_app 装配 Agent Service + /openarch/config
 
 **Files:**
 - Modify: `src/openarch/main.py`
-- Test: `tests/test_web_cli.py`
+- Test: `tests/unit/test_web_cli.py`
 
 - [ ] **Step 1: 写失败测试**
 
-创建 `tests/test_web_cli.py`：
+创建 `tests/unit/test_web_cli.py`：
 
 ```python
 from openarch.main import parse_args
@@ -621,7 +621,7 @@ def test_parse_args_web_defaults():
 
 - [ ] **Step 2: 运行确认失败**
 
-Run: `uv run pytest tests/test_web_cli.py -q`
+Run: `uv run pytest tests/unit/test_web_cli.py -q`
 Expected: FAIL — `ImportError: cannot import name 'parse_args'`。
 
 - [ ] **Step 3: 实现**
@@ -698,15 +698,15 @@ if __name__ == "__main__":
 
 Run:
 ```bash
-uv run pytest tests/test_web_cli.py tests/test_main.py -q
+uv run pytest tests/unit/test_web_cli.py tests/unit/test_main.py -q
 uv run openarch web --help
 ```
-Expected: 测试全 PASS；`--help` 输出含 `--host/--port`。（`tests/test_main.py` 若不存在则跳过该路径。）
+Expected: 测试全 PASS；`--help` 输出含 `--host/--port`。（`tests/unit/test_main.py` 若不存在则跳过该路径。）
 
 - [ ] **Step 5: 提交**
 
 ```bash
-git add src/openarch/main.py tests/test_web_cli.py
+git add src/openarch/main.py tests/unit/test_web_cli.py
 git commit -m "feat(cli): openarch web 子命令（bootstrap → uvicorn）"
 ```
 
