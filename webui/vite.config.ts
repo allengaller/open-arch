@@ -3,12 +3,13 @@ import react from '@vitejs/plugin-react'
 import { defineConfig } from 'vite'
 
 const API_TARGET = 'http://127.0.0.1:8000'
+// 前缀与后端 OpenAPI 实测路由一致：agentscope 列表端点是单数 /agent/、/credential/。
 const API_PREFIXES = [
   '/sessions',
   '/chat',
   '/workspace',
-  '/agents',
-  '/credentials',
+  '/agent',
+  '/credential',
   '/model',
   '/openarch',
   '/health',
