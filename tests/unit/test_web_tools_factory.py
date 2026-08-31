@@ -30,3 +30,7 @@ async def test_factory_binds_session_workdir(tmp_path):
     assert deliverable._workspace == workdir
     waf = next(t for t in tools if t.name == "review_with_waf")
     assert waf._checklist_path == settings.skills_dir / "aliyun-waf" / "checklist.yaml"
+
+    tools_b = await factory("local", "agent-2", "sess-1")
+    drawio_b = next(t for t in tools_b if t.name == "export_drawio")
+    assert drawio_b._workspace == Path(tmp_path / "ws" / "agent-2")
