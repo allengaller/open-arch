@@ -71,9 +71,16 @@ async def test_web_copilot_roundtrip(tmp_path):
                 f"/sessions/{session_id}/messages?agent_id={info.agent_id}",
                 headers=headers,
             )
-            if any(
-                msg.get("role") == "assistant" for msg in m.json()["messages"]
-            ):
+            assert m.status_code == 200, m.text
+            payload = m.json()
+            if any(msg.get("role") == "assistant" for msg in payload["messages"]):
                 break
+            if not payload.get("is_running", True):
+                pytest.fail(
+                    f"agent 已停止（is_running=false）但无助手回复；"
+                    f"session={session_id}，末次响应：{payload}"
+                )
         else:
-            pytest.fail("120 秒内未收到助手回复")
+            pytest.fail(
+                f"120 秒内未收到助手回复；session={session_id}，末次响应：{m.json()}"
+            )
