@@ -1,8 +1,10 @@
 services:
   openarch:
     build: .
-    env_file: .env
     stdin_open: true
     tty: true
+    env_file: .env
+    ports:
+      - "8000:8000"
     volumes:
-      - ./deliverables:/data/deliverables
+      - ./data:/data

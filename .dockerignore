@@ -11,3 +11,5 @@ dist
 .env*
 vibe_images
 .github
+webui/node_modules
+webui/dist
