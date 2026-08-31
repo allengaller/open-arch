@@ -19,6 +19,14 @@ class Settings:
     model: str
     workspace: Path
     skills_dir: Path
+    db: Path = Path("./data/openarch.db")
+    web_host: str = "127.0.0.1"
+    web_port: int = 8000
+
+    @property
+    def workspace_root(self) -> Path:
+        """Web 模式下 AgentScope 服务工作区根（<DB 所在目录>/workspaces）。"""
+        return self.db.parent / "workspaces"
 
 
 def load_settings(env: dict[str, str] | None = None) -> Settings:
@@ -43,6 +51,9 @@ def load_settings(env: dict[str, str] | None = None) -> Settings:
     default_skills = Path(__file__).resolve().parents[2] / "skills"
     skills_dir = Path(e.get("OPENARCH_SKILLS_DIR") or default_skills).expanduser().resolve()
 
+    db = Path(e.get("OPENARCH_DB") or "./data/openarch.db").expanduser().resolve()
+    web_port_raw = e.get("OPENARCH_PORT")
+
     return Settings(
         dashscope_api_key=dashscope_key,
         openai_api_key=openai_key,
@@ -50,4 +61,7 @@ def load_settings(env: dict[str, str] | None = None) -> Settings:
         model=e.get("OPENARCH_MODEL") or _DEFAULT_MODEL,
         workspace=workspace,
         skills_dir=skills_dir,
+        db=db,
+        web_host=e.get("OPENARCH_HOST") or "127.0.0.1",
+        web_port=int(web_port_raw) if web_port_raw else 8000,
     )
