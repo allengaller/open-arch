@@ -7,3 +7,4 @@ deliverables/
 .ruff_cache/
 dist/
 .impeccable/
+webui/dist/
