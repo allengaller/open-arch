@@ -51,3 +51,62 @@ async def test_bootstrap_openai_compat_mode(tmp_path):
     assert len(creds) == 1
     assert creds[0].data["type"] == "openai_credential"
     assert info.credential_id == creds[0].id
+
+
+async def test_credential_rotation(tmp_path):
+    from agentscope.app.storage import AsyncSQLAlchemyStorage
+
+    db = tmp_path / "r.db"
+    s1 = load_settings(
+        env={"DASHSCOPE_API_KEY": "sk-A", "OPENARCH_DB": str(db)}
+    )
+    await run_bootstrap(s1)
+    s2 = load_settings(
+        env={"DASHSCOPE_API_KEY": "sk-B", "OPENARCH_DB": str(db)}
+    )
+    info = await run_bootstrap(s2)
+    storage = AsyncSQLAlchemyStorage(f"sqlite+aiosqlite:///{db}")
+    async with storage:
+        creds = await storage.list_credentials("local")
+    assert len(creds) == 1
+    assert creds[0].data["api_key"] == "sk-B"
+    assert info.credential_id == creds[0].id
+
+
+async def test_agent_prompt_reassert(tmp_path):
+    from agentscope.agent import ContextConfig, ReActConfig
+    from agentscope.app.storage import (
+        AgentData,
+        AgentRecord,
+        AsyncSQLAlchemyStorage,
+    )
+
+    db = tmp_path / "p.db"
+    storage = AsyncSQLAlchemyStorage(
+        f"sqlite+aiosqlite:///{db}", create_tables=True
+    )
+    async with storage:
+        await storage.upsert_agent(
+            "local",
+            AgentRecord(
+                id="openarch-agent",
+                user_id="local",
+                data=AgentData(
+                    id="openarch-agent",
+                    name="OpenArch",
+                    system_prompt="stale prompt",
+                    context_config=ContextConfig(),
+                    react_config=ReActConfig(),
+                ),
+            ),
+        )
+    s = load_settings(
+        env={"DASHSCOPE_API_KEY": "sk-test", "OPENARCH_DB": str(db)}
+    )
+    await run_bootstrap(s)
+    storage2 = AsyncSQLAlchemyStorage(f"sqlite+aiosqlite:///{db}")
+    async with storage2:
+        agents = await storage2.list_agents("local")
+    assert len(agents) == 1
+    assert agents[0].data.name == "OpenArch"
+    assert agents[0].data.system_prompt == SYSTEM_PROMPT

@@ -3,8 +3,7 @@ from __future__ import annotations
 from dataclasses import dataclass
 
 from agentscope.agent import ContextConfig, ReActConfig
-from agentscope.app.storage import AsyncSQLAlchemyStorage
-from agentscope.app.storage._model import AgentData, AgentRecord
+from agentscope.app.storage import AgentData, AgentRecord, AsyncSQLAlchemyStorage
 from agentscope.credential import (
     CredentialBase,
     DashScopeCredential,
@@ -17,6 +16,8 @@ from openarch.config import Settings
 
 USER_ID = "local"
 _AGENT_NAME = "OpenArch"
+_CREDENTIAL_ID = "openarch-primary"
+_AGENT_ID = "openarch-agent"
 
 
 @dataclass(frozen=True)
@@ -28,6 +29,8 @@ class BootstrapInfo:
 async def run_bootstrap(settings: Settings) -> BootstrapInfo:
     """幂等种子：凭证（按模式二选一）+ OpenArch agent 记录。
 
+    预设固定 id + 无条件 upsert：重复调用对同一行原地更新，
+    配置轮换（api_key / base_url）与提示词升级随之生效。
     在 uvicorn 启动前独立调用（不经 create_app 的 lifespan），
     因此这里自开一个短生命周期的 storage 连接。
     """
@@ -43,26 +46,24 @@ async def run_bootstrap(settings: Settings) -> BootstrapInfo:
 async def _seed_credential(storage: AsyncSQLAlchemyStorage, settings: Settings) -> str:
     if settings.base_url:
         credential: CredentialBase = OpenAICredential(
+            id=_CREDENTIAL_ID,
             api_key=SecretStr(settings.openai_api_key or ""),
             base_url=settings.base_url,
         )
     else:
         credential = DashScopeCredential(
-            api_key=SecretStr(settings.dashscope_api_key or "")
+            id=_CREDENTIAL_ID,
+            api_key=SecretStr(settings.dashscope_api_key or ""),
         )
-    for record in await storage.list_credentials(USER_ID):
-        if record.data.get("type") == credential.type:
-            return record.id
     return await storage.upsert_credential(USER_ID, credential)
 
 
 async def _seed_agent(storage: AsyncSQLAlchemyStorage) -> str:
-    for record in await storage.list_agents(USER_ID):
-        if record.data.name == _AGENT_NAME:
-            return record.id
     record = AgentRecord(
+        id=_AGENT_ID,
         user_id=USER_ID,
         data=AgentData(
+            id=_AGENT_ID,
             name=_AGENT_NAME,
             system_prompt=SYSTEM_PROMPT,
             context_config=ContextConfig(),
