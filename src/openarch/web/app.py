@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import logging
 from pathlib import Path
 
 from agentscope.app import create_app
@@ -11,6 +12,8 @@ from fastapi.staticfiles import StaticFiles
 from openarch.config import Settings
 from openarch.web.bootstrap import make_storage
 from openarch.web.tools_factory import make_openarch_tools
+
+logger = logging.getLogger(__name__)
 
 # 候选顺序：包内（Docker 构建产物）优先，仓库内（本地 npm run build）兜底。
 _STATIC_CANDIDATES = (
@@ -46,7 +49,12 @@ def create_web_app(settings: Settings) -> FastAPI:
         return {"model": settings.model}
 
     static_dir = find_static_dir()
-    if static_dir is not None:
+    if static_dir is None:
+        logger.warning(
+            "未找到 webui 静态产物（webui/dist 或包内 static/dist），静态托管已禁用；"
+            "请执行 `npm run build`（见 webui/README）。"
+        )
+    else:
         app.mount(
             "/",
             StaticFiles(directory=static_dir, html=True),

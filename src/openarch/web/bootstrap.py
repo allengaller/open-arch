@@ -27,7 +27,12 @@ class BootstrapInfo:
 
 
 def make_storage(settings: Settings) -> AsyncSQLAlchemyStorage:
-    """按 Settings 拼装 SQLite storage（与 create_web_app 共用，避免连接串漂移）。"""
+    """按 Settings 拼装 SQLite storage（与 create_web_app 共用，避免连接串漂移）。
+
+    生命周期约定：返回的 storage 必须以 async context manager 进入后使用——
+    run_bootstrap 里短开短关（不经 lifespan），create_web_app 则交给
+    create_app 的 lifespan 统一开关。
+    """
     return AsyncSQLAlchemyStorage(
         f"sqlite+aiosqlite:///{settings.db}", create_tables=True
     )

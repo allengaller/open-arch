@@ -1,7 +1,7 @@
 from fastapi.testclient import TestClient
 
 from openarch.config import load_settings
-from openarch.web.app import create_web_app
+from openarch.web.app import _STATIC_CANDIDATES, create_web_app, find_static_dir
 
 
 def _settings(tmp_path):
@@ -34,3 +34,42 @@ def test_static_mount_when_dist_exists(tmp_path, monkeypatch):
         resp = client.get("/")
         assert resp.status_code == 200
         assert "openarch-ok" in resp.text
+
+
+def _with_candidates(monkeypatch, *dirs):
+    monkeypatch.setattr("openarch.web.app._STATIC_CANDIDATES", dirs)
+
+
+def test_find_static_dir_prefers_first_candidate(tmp_path, monkeypatch):
+    # 包内（Docker 构建产物）优先于仓库兜底——顺序颠倒会让容器静默退化到旧产物。
+    first, second = tmp_path / "pkg", tmp_path / "repo"
+    for d in (first, second):
+        d.mkdir()
+        (d / "index.html").write_text("<html></html>")
+    _with_candidates(monkeypatch, first, second)
+    assert find_static_dir() == first
+
+
+def test_find_static_dir_skips_dir_without_index_html(tmp_path, monkeypatch):
+    # 目录存在但缺 index.html 不算有效产物，继续探测下一个候选。
+    empty, valid = tmp_path / "empty", tmp_path / "valid"
+    empty.mkdir()
+    valid.mkdir()
+    (valid / "index.html").write_text("<html></html>")
+    _with_candidates(monkeypatch, empty, valid)
+    assert find_static_dir() == valid
+
+
+def test_find_static_dir_returns_none_when_all_missing(tmp_path, monkeypatch):
+    # 本地未构建前端时返回 None，create_web_app 据此跳过静态挂载。
+    _with_candidates(monkeypatch, tmp_path / "missing-a", tmp_path / "missing-b")
+    assert find_static_dir() is None
+
+
+def test_static_candidates_shape():
+    # 锁定候选形态：包内 static/dist 在前、仓库 webui/dist 兜底在后。
+    assert _STATIC_CANDIDATES[0].name == "dist"
+    assert _STATIC_CANDIDATES[0].parent.name == "static"
+    assert _STATIC_CANDIDATES[1].name == "dist"
+    assert _STATIC_CANDIDATES[1].parent.name == "webui"
+
