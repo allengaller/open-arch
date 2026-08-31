@@ -26,6 +26,13 @@ class BootstrapInfo:
     credential_id: str
 
 
+def make_storage(settings: Settings) -> AsyncSQLAlchemyStorage:
+    """按 Settings 拼装 SQLite storage（与 create_web_app 共用，避免连接串漂移）。"""
+    return AsyncSQLAlchemyStorage(
+        f"sqlite+aiosqlite:///{settings.db}", create_tables=True
+    )
+
+
 async def run_bootstrap(settings: Settings) -> BootstrapInfo:
     """幂等种子：凭证（按模式二选一）+ OpenArch agent 记录。
 
@@ -34,9 +41,7 @@ async def run_bootstrap(settings: Settings) -> BootstrapInfo:
     在 uvicorn 启动前独立调用（不经 create_app 的 lifespan），
     因此这里自开一个短生命周期的 storage 连接。
     """
-    storage = AsyncSQLAlchemyStorage(
-        f"sqlite+aiosqlite:///{settings.db}", create_tables=True
-    )
+    storage = make_storage(settings)
     async with storage:
         credential_id = await _seed_credential(storage, settings)
         agent_id = await _seed_agent(storage)
