@@ -20,10 +20,21 @@ _STATIC_CANDIDATES = (
     Path(__file__).parent / "static" / "dist",
     Path(__file__).parents[3] / "webui" / "dist",
 )
+_GTM_CANDIDATES = (
+    Path(__file__).parent / "static" / "gtm",
+    Path(__file__).parents[3] / "GTM",
+)
 
 
 def find_static_dir() -> Path | None:
     for candidate in _STATIC_CANDIDATES:
+        if (candidate / "index.html").is_file():
+            return candidate
+    return None
+
+
+def find_gtm_dir() -> Path | None:
+    for candidate in _GTM_CANDIDATES:
         if (candidate / "index.html").is_file():
             return candidate
     return None
@@ -59,5 +70,18 @@ def create_web_app(settings: Settings) -> FastAPI:
             "/",
             StaticFiles(directory=static_dir, html=True),
             name="webui",
+        )
+
+    gtm_dir = find_gtm_dir()
+    if gtm_dir is None:
+        logger.warning(
+            "未找到 GTM 营销页（仓库 GTM/ 或包内 static/gtm），"
+            "webui「返回项目主页 → /gtm/」入口将不可用。"
+        )
+    else:
+        app.mount(
+            "/gtm",
+            StaticFiles(directory=gtm_dir, html=True),
+            name="gtm",
         )
     return app

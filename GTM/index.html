@@ -1,0 +1,743 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>OpenArch — 把售前架构师的工作显性化 · clone 即用</title>
+<meta name="description" content="面向 Solutions Architect（售前全栈架构师）的开源工具箱：把岗位工作显性化为技能资产与可执行工作流。新手跟练入职，在岗 SA 梳理标准，资深 SA 沉淀传承。第一张已交付工作单：架构设计。">
+<link rel="preconnect" href="https://fonts.googleapis.cn">
+<link rel="preconnect" href="https://fonts.gstatic.cn" crossorigin>
+<link href="https://fonts.googleapis.cn/css2?family=Noto+Sans+SC:wght@400;500;700;900&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+/* Hallmark · genre: modern-minimal · macrostructure: Solution Document · design-system: DESIGN.md · designed-as-app
+ * enterprise console: paper #f7f8fa · ink #0f1728 · accent #1f4fd8 · danger #b91c1c
+ * signature: capability panel row reveal, terminal line reveal; cross-link to /gtm/ from webui
+ */
+:root{
+  --paper:#f7f8fa;
+  --paper-2:#eef1f6;
+  --surface:#ffffff;         /* 白表面：按钮/消息/stage 的净白底 */
+  --ink-on-accent:#ffffff;   /* 主色按钮/危险/终端上的白字 */
+  --ink-on-term:#ffffff;     /* 终端/标签上的白字 */
+  --ink:#0f1728;
+  --ink-70:rgba(15,23,40,.7);
+  --ink-55:rgba(15,23,40,.55);
+  --ink-40:rgba(15,23,40,.40);
+  --line:rgba(15,23,40,.12);
+  --line-strong:rgba(15,23,40,.28);
+  --accent:#1f4fd8;
+  --accent-deep:#173db5;
+  --accent-soft:#e8edff;
+  --success:#15803d;
+  --warning:#b45309;
+  --danger:#b91c1c;
+  --term-bg:#0f1728;
+  --term-bg-2:#16213a;
+  --term-text:#e8ecf4;
+  --term-dim:#9aa5b8;
+  --term-tool-text:#c9d1e0;
+  --term-ok:#7fd0a0;
+  --term-warn:#e3b15c;
+  --term-confirm:#f0937c;
+  --term-file:#9fc3e8;
+  --term-dot:rgba(255,255,255,.22);
+  --mono:"JetBrains Mono",ui-monospace,SFMono-Regular,Menlo,monospace;
+  --sans:"Noto Sans SC","PingFang SC","Microsoft YaHei",system-ui,sans-serif;
+  --ease-out:cubic-bezier(.16,1,.3,1);
+  --radius:6px;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+body{
+  font-family:var(--sans);
+  background:var(--paper);
+  color:var(--ink);
+  font-size:16px;
+  line-height:1.6;
+  -webkit-font-smoothing:antialiased;
+}
+::selection{background:var(--accent);color:var(--surface)}
+::-webkit-scrollbar{width:10px;height:10px}
+::-webkit-scrollbar-track{background:var(--paper-2)}
+::-webkit-scrollbar-thumb{background:var(--line-strong);border:2px solid var(--paper)}
+::-webkit-scrollbar-thumb:hover{background:var(--ink)}
+:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
+a{color:inherit}
+.mono{font-family:var(--mono);font-variant-numeric:tabular-nums}
+.skip{position:absolute;left:-9999px;top:0;background:var(--ink);color:var(--ink-on-accent);padding:10px 18px;z-index:99}
+.skip:focus{left:0}
+
+.sheet{max-width:1400px;margin-inline:auto;padding-inline:clamp(20px,4vw,64px)}
+
+/* ---------- 品牌顶栏 ---------- */
+.topbar{
+  position:sticky;top:0;z-index:50;
+  background:rgba(247,248,250,.92);
+  backdrop-filter:blur(6px);
+  border-bottom:1px solid var(--line);
+}
+.topbar-in{
+  display:flex;align-items:center;gap:8px;
+  height:60px;
+}
+.brand{
+  display:inline-flex;align-items:center;gap:10px;
+  font-weight:900;font-size:17px;letter-spacing:-.01em;
+  text-decoration:none;
+}
+.brand-mark{width:22px;height:22px;border-radius:5px;background:var(--accent);display:inline-flex;align-items:center;justify-content:center;color:var(--ink-on-accent);font-size:12px;font-weight:900}
+.brand small{font-weight:500;font-size:12px;color:var(--ink-55);margin-left:2px}
+.topbar-spacer{flex:1}
+.topnav{display:flex;align-items:center;gap:2px}
+.topnav a{
+  text-decoration:none;color:var(--ink-70);
+  font-size:14px;padding:8px 14px;border-radius:6px;
+}
+.topnav a:hover{color:var(--ink);background:var(--paper-2)}
+.topnav .console-link{display:inline-flex;align-items:center;gap:6px;color:var(--accent);font-weight:700}
+.topnav .console-link:hover{background:var(--accent-soft)}
+
+/* ---------- 按钮 ---------- */
+.btn{
+  display:inline-flex;align-items:center;gap:8px;
+  border-radius:var(--radius);
+  cursor:pointer;font-family:var(--sans);font-size:14px;font-weight:700;
+  transition:background .18s var(--ease-out),border-color .18s var(--ease-out),color .18s var(--ease-out),transform .18s var(--ease-out);
+}
+.btn:active{transform:translateY(1px)}
+.btn-primary{background:var(--accent);border:1px solid var(--accent);color:var(--ink-on-accent);text-decoration:none;padding:11px 22px}
+.btn-primary:hover{background:var(--accent-deep);border-color:var(--accent-deep)}
+.btn-secondary{background:var(--surface);border:1px solid var(--line-strong);color:var(--ink);text-decoration:none;padding:11px 22px}
+.btn-secondary:hover{background:var(--paper-2)}
+.btn-ghost{background:none;border:none;color:var(--ink-70);padding:7px 10px}
+.btn-ghost:hover{color:var(--ink)}
+.btn-danger{background:var(--danger);border:1px solid var(--danger);color:var(--ink-on-accent)}
+
+/* ---------- Hero ---------- */
+.hero{
+  display:grid;
+  grid-template-columns:1.1fr 1fr;
+  gap:clamp(36px,4.5vw,80px);
+  align-items:start;
+  padding-block:clamp(56px,9vh,104px) clamp(52px,8vh,96px);
+}
+.hero h1{
+  font-size:clamp(40px,5.5vw,76px);
+  font-weight:900;
+  line-height:1.06;
+  letter-spacing:-.02em;
+  text-wrap:balance;
+}
+.hero .sub{
+  margin-top:clamp(18px,2.4vh,26px);
+  font-size:clamp(15px,1.2vw,17.5px);
+  color:var(--ink-70);
+  max-width:34em;
+}
+.hero .sub b{color:var(--ink);font-weight:700}
+.hero-actions{display:flex;gap:14px;flex-wrap:wrap;margin-top:clamp(26px,3.6vh,36px)}
+.hero-hint{margin-top:14px;font-size:12.5px;color:var(--ink-55);font-family:var(--mono);letter-spacing:.02em}
+
+/* 能力面板（替代旧评分卡，不是评审表） */
+.cap{
+  background:var(--paper-2);
+  border:1px solid var(--line);
+  border-radius:var(--radius);
+  overflow:hidden;
+}
+.cap-head{
+  display:flex;justify-content:space-between;align-items:center;gap:12px;
+  padding:14px 20px;
+  border-bottom:1px solid var(--line);
+  font-size:13.5px;font-weight:700;letter-spacing:.02em;
+}
+.cap-head .tag{font-family:var(--mono);font-size:11px;color:var(--accent);letter-spacing:.08em;border:1px solid var(--accent);border-radius:4px;padding:2px 8px;white-space:nowrap}
+.cap-row{
+  display:grid;grid-template-columns:72px 1fr;gap:16px;
+  padding:16px 20px;align-items:start;
+  border-bottom:1px solid var(--line);
+  transition:background .2s var(--ease-out);
+}
+.cap-row:last-child{border-bottom:none}
+.cap-row:hover{background:var(--paper)}
+.cap-row .idx{font-family:var(--mono);font-size:13px;font-weight:700;color:var(--accent);letter-spacing:.06em;padding-top:3px}
+.cap-row .name{font-size:15.5px;font-weight:700}
+.cap-row .desc{font-size:13.5px;color:var(--ink-70);line-height:1.55;margin-top:3px}
+.cap-row .meta{font-family:var(--mono);font-size:11px;color:var(--ink-55);display:block;margin-top:6px;letter-spacing:.05em}
+.js .cap-row{opacity:0;transform:translateY(6px)}
+.js .cap.play .cap-row{opacity:1;transform:none;transition:opacity .5s var(--ease-out),transform .5s var(--ease-out)}
+.js .cap.play .cap-row:nth-child(2){transition-delay:90ms}
+.js .cap.play .cap-row:nth-child(3){transition-delay:180ms}
+.js .cap.play .cap-row:nth-child(4){transition-delay:270ms}
+
+/* ---------- 节 ---------- */
+section{border-top:1px solid var(--line)}
+.sec-head{
+  display:flex;align-items:baseline;gap:24px;
+  padding:clamp(40px,6vh,64px) 0 8px;
+}
+.sec-head h2{
+  font-size:clamp(26px,3vw,44px);font-weight:900;letter-spacing:-.02em;line-height:1.1;
+}
+.sec-meta{margin-left:auto;font-family:var(--mono);font-size:12px;color:var(--ink-55);letter-spacing:.06em;white-space:nowrap}
+.sec-lede{max-width:44em;color:var(--ink-70);font-size:clamp(14.5px,1.15vw,16.5px);padding-bottom:clamp(26px,4vh,40px)}
+
+/* 售前生命周期条 */
+.lc-strip{
+  display:flex;flex-wrap:wrap;
+  border:1px solid var(--line);border-right:none;border-radius:var(--radius);overflow:hidden;
+  margin-bottom:clamp(32px,5vh,48px);
+}
+.lc-strip .stage{
+  flex:1;min-width:118px;
+  padding:13px 16px 12px;
+  border-right:1px solid var(--line);
+  font-size:13.5px;font-weight:500;color:var(--ink-55);
+}
+.lc-strip .stage small{
+  display:block;font-family:var(--mono);font-size:10px;
+  letter-spacing:.1em;color:var(--ink-55);margin-top:4px;
+}
+.lc-strip .stage.done{color:var(--ink);font-weight:700;background:#fff}
+.lc-strip .stage.done small{color:var(--success);font-weight:700}
+
+/* 角色行 */
+.role-head{
+  display:grid;grid-template-columns:240px 1.35fr 1fr;
+  gap:clamp(16px,2vw,36px);
+  font-size:12px;font-weight:500;color:var(--ink-55);
+  letter-spacing:.08em;
+  padding:10px 0 8px;
+  border-bottom:1px solid var(--line-strong);
+}
+.role-row{
+  display:grid;grid-template-columns:240px 1.35fr 1fr;
+  gap:clamp(16px,2vw,36px);align-items:start;
+  border-bottom:1px solid var(--line);
+  padding:24px 0;
+  transition:background .2s var(--ease-out);
+}
+.role-row:hover{background:var(--paper-2)}
+.role-row .who .code{font-family:var(--mono);font-size:11.5px;font-weight:700;color:var(--accent);letter-spacing:.08em;display:block}
+.role-row .who b{display:block;font-size:clamp(18px,1.6vw,22px);font-weight:900;margin-top:4px}
+.role-row .who span{font-family:var(--mono);font-size:10.5px;color:var(--ink-55);letter-spacing:.08em;display:block;margin-top:3px}
+.role-row .get{font-size:14.5px;color:var(--ink-70);line-height:1.65}
+.role-row .get b{color:var(--ink)}
+.role-row .proof{font-size:13.5px;color:var(--ink-70);line-height:1.6}
+.role-row .proof i{font-style:normal;font-family:var(--mono);font-size:12px;color:var(--accent);display:block;margin-top:4px;letter-spacing:.03em}
+.roles-note{
+  padding:18px 0 clamp(40px,6vh,64px);
+  font-size:13.5px;color:var(--ink-55);
+}
+.roles-note b{color:var(--ink)}
+
+/* 工作流行 */
+.flow{border-top:1px solid var(--line-strong)}
+.flow-row{
+  display:grid;
+  grid-template-columns:72px 1.35fr 1fr 1fr;
+  gap:clamp(16px,2vw,36px);
+  align-items:center;
+  border-bottom:1px solid var(--line);
+  padding:22px 0;
+  transition:background .2s var(--ease-out);
+}
+.flow-row:hover{background:var(--paper-2)}
+.flow-row .idx{
+  font-family:var(--mono);font-size:clamp(22px,2vw,30px);font-weight:700;
+  color:var(--ink-40);font-variant-numeric:tabular-nums;
+}
+.flow-row .step b{display:block;font-size:clamp(17px,1.5vw,20px);font-weight:700}
+.flow-row .step span{font-size:13.5px;color:var(--ink-55);line-height:1.5;display:block;margin-top:3px}
+.flow-row .tool{font-family:var(--mono);font-size:13px;letter-spacing:.01em}
+.flow-row .tool .tname{display:inline-block;background:var(--ink);color:var(--ink-on-accent);padding:3px 10px;font-weight:500;border-radius:4px}
+.flow-row .tool .tnote{display:block;margin-top:6px;color:var(--ink-55);font-size:11.5px}
+.flow-row .artifact{font-size:13.5px;color:var(--ink-70)}
+.flow-row .artifact i{font-style:normal;font-family:var(--mono);font-size:12px;color:var(--accent);display:block;margin-top:3px;letter-spacing:.03em}
+
+/* 终端实录 */
+.term{
+  background:var(--term-bg);color:var(--term-text);
+  font-family:var(--mono);
+  font-size:clamp(12.5px,1.05vw,14.5px);
+  line-height:1.85;
+  margin-bottom:clamp(48px,7vh,80px);
+  border-radius:var(--radius);
+  overflow:hidden;
+  border:1px solid var(--ink);
+}
+.term-head{
+  display:flex;align-items:center;gap:10px;
+  background:var(--term-bg-2);
+  border-bottom:1px solid rgba(255,255,255,.09);
+  padding:11px 18px;font-size:12px;color:var(--term-dim);letter-spacing:.05em;
+}
+.term-head .dots{display:flex;gap:6px;margin-right:6px}
+.term-head .dots i{width:10px;height:10px;border-radius:50%;background:var(--term-dot)}
+.term-head .demo-tag{color:var(--term-confirm);border-color:var(--term-confirm)}
+.term-body{padding:20px 22px 24px;overflow-x:auto}
+.term-body pre{white-space:pre-wrap;word-break:break-all}
+.t-dim{color:var(--term-dim)}
+.t-user{color:var(--ink-on-term);font-weight:500}
+.t-agent{color:var(--term-text)}
+.t-tool{color:var(--term-tool-text)}
+.t-tool b{color:var(--ink-on-term);font-weight:500}
+.t-ok{color:var(--term-ok)}
+.t-warn{color:var(--term-warn)}
+.t-confirm{color:var(--term-confirm)}
+.t-file{color:var(--term-file)}
+.js .term .t-line{opacity:0;transform:translateY(6px)}
+.js .term.play .t-line{opacity:1;transform:none;transition:opacity .5s var(--ease-out),transform .5s var(--ease-out)}
+
+/* 技能资产行 */
+.skills{border-top:1px solid var(--line-strong)}
+.skill-row{
+  display:grid;grid-template-columns:150px 1fr 1.4fr 190px;
+  gap:clamp(16px,2vw,36px);align-items:baseline;
+  border-bottom:1px solid var(--line);
+  padding:20px 0;
+}
+.skill-row:hover{background:var(--paper-2)}
+.skill-row .code{font-family:var(--mono);font-size:13px;font-weight:700;color:var(--accent);letter-spacing:.05em}
+.skill-row .sname{font-size:clamp(16px,1.4vw,19px);font-weight:700}
+.skill-row .sname span{display:block;font-family:var(--mono);font-size:11px;color:var(--ink-55);margin-top:3px;letter-spacing:.04em}
+.skill-row .sdesc{font-size:13.5px;color:var(--ink-70);line-height:1.55}
+.skill-row .ssrc{font-size:12px;color:var(--ink-55);text-align:right}
+.skills-note{
+  padding:18px 0 clamp(40px,6vh,64px);
+  font-size:13.5px;color:var(--ink-55);
+  border-bottom:1px solid var(--line);
+}
+.skills-note b{color:var(--ink)}
+
+/* 证据区 */
+.ev-grid{
+  display:grid;grid-template-columns:1fr 1fr;
+  border-top:1px solid var(--line-strong);
+  margin-bottom:clamp(40px,6vh,64px);
+}
+.ev-col{padding:26px 0 34px}
+.ev-col+.ev-col{border-left:1px solid var(--line);padding-left:clamp(24px,3vw,48px)}
+.ev-col h3{font-size:clamp(18px,1.6vw,22px);font-weight:900;padding-bottom:12px;border-bottom:1px solid var(--line-strong);display:flex;justify-content:space-between;align-items:baseline}
+.ev-col h3 small{font-family:var(--mono);font-size:11px;color:var(--ink-55);letter-spacing:.08em}
+.ev-col ul{list-style:none}
+.ev-col li{
+  display:flex;gap:14px;align-items:baseline;
+  padding:12px 0;border-bottom:1px solid var(--line);font-size:14.5px;
+}
+.ev-col li .mono{font-size:11.5px;color:var(--ink-55);flex:none;width:86px;letter-spacing:.03em}
+.ev-col li b{font-weight:700}
+.ev-col li span{color:var(--ink-70);font-size:13.5px}
+.ev-col.now li .mono{color:var(--accent)}
+.ev-base{
+  border-top:1px solid var(--line-strong);
+  display:grid;grid-template-columns:repeat(3,1fr);
+  margin-bottom:clamp(48px,7vh,80px);
+}
+.ev-base .cell{padding:22px 26px 26px;border-right:1px solid var(--line)}
+.ev-base .cell:last-child{border-right:none}
+.ev-base .cell .mono{font-size:11px;color:var(--accent);letter-spacing:.1em;display:block;margin-bottom:8px}
+.ev-base .cell b{font-size:15.5px;display:block;margin-bottom:5px}
+.ev-base .cell span{font-size:13px;color:var(--ink-70);line-height:1.55;display:block}
+
+/* 上手 */
+.start-grid{display:grid;grid-template-columns:1fr 1.1fr;gap:clamp(32px,4vw,72px);padding-bottom:clamp(48px,7vh,84px)}
+.start-grid h2{font-size:clamp(28px,3.4vw,44px);font-weight:900;line-height:1.12;letter-spacing:-.02em}
+.start-grid .s-lede{margin-top:18px;color:var(--ink-70);font-size:16px;max-width:30em}
+.start-links{margin-top:28px;display:flex;gap:14px;flex-wrap:wrap}
+.cmdlist{border-top:1px solid var(--line-strong);border-radius:var(--radius);overflow:hidden}
+.cmd-row{border-bottom:1px solid var(--line);display:flex;align-items:center;gap:16px;padding:14px 0}
+.cmd-row .n{font-family:var(--mono);font-size:12px;color:var(--accent);font-weight:700;flex:none;width:34px}
+.cmd-row code{
+  font-family:var(--mono);font-size:clamp(12.5px,1.1vw,14.5px);
+  background:var(--surface);border:1px solid var(--line);
+  border-radius:6px;
+  padding:10px 14px;flex:1;overflow-x:auto;white-space:nowrap;
+}
+.cmd-row button{
+  flex:none;font-family:var(--mono);font-size:11.5px;letter-spacing:.08em;
+  background:var(--surface);border:1px solid var(--line-strong);border-radius:6px;color:var(--ink);
+  padding:8px 14px;cursor:pointer;font-weight:700;
+  transition:background .2s var(--ease-out),color .2s var(--ease-out),border-color .2s var(--ease-out);
+}
+.cmd-row button:hover{background:var(--ink);color:var(--ink-on-accent);border-color:var(--ink)}
+.cmd-row button.done{background:var(--success);border-color:var(--success);color:var(--ink-on-accent)}
+.cmd-note{margin-top:16px;font-size:12.5px;color:var(--ink-55);font-family:var(--mono);letter-spacing:.02em}
+
+/* 页脚 */
+footer{border-top:1px solid var(--line-strong);background:var(--paper-2)}
+.foot-grid{
+  display:grid;grid-template-columns:repeat(6,auto);gap:clamp(20px,3vw,56px);
+  padding:34px 0 12px;
+  font-family:var(--mono);font-size:12px;
+}
+.foot-grid .lbl{color:var(--ink-55);font-size:10.5px;display:block;letter-spacing:.1em;margin-bottom:4px}
+.foot-grid a{color:var(--ink);text-decoration:underline;text-underline-offset:3px}
+.foot-grid a:hover{color:var(--accent)}
+.foot-line{
+  padding:16px 0 30px;font-size:12px;color:var(--ink-55);
+  border-top:1px solid var(--line);margin-top:20px;
+  display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap;
+}
+
+/* ---------- 响应式 ---------- */
+@media (max-width:1080px){
+  .flow-row{grid-template-columns:56px 1.3fr 1fr;grid-auto-rows:auto}
+  .flow-row .artifact{grid-column:2/-1;padding-top:2px}
+  .skill-row{grid-template-columns:120px 1fr;row-gap:8px}
+  .skill-row .sdesc,.skill-row .ssrc{grid-column:2;text-align:left}
+  .lc-strip .stage{min-width:0}
+  .role-head,.role-row{grid-template-columns:180px 1fr 1fr}
+}
+@media (max-width:960px){
+  .hero{grid-template-columns:1fr}
+  .topnav a:not(.console-link):not(.gh-link){display:none}
+  .role-head{display:none}
+  .role-row{grid-template-columns:1fr;gap:10px;padding:22px 0}
+  .role-row .proof i{margin-top:2px}
+  .ev-grid{grid-template-columns:1fr}
+  .ev-col+.ev-col{border-left:none;border-top:1px solid var(--line);padding-left:0}
+  .ev-base{grid-template-columns:1fr}
+  .ev-base .cell{border-right:none;border-bottom:1px solid var(--line)}
+  .start-grid{grid-template-columns:1fr}
+  .foot-grid{grid-template-columns:repeat(3,1fr)}
+}
+@media (max-width:600px){
+  html,body{overflow-x:hidden}
+  .sheet{padding-inline:20px}
+  .hero{padding-block:48px 52px;gap:40px}
+  .hero>*{min-width:0}
+  .hero h1{font-size:clamp(34px,11vw,48px);line-height:1.05}
+  .hero .sub{font-size:15px;overflow-wrap:anywhere}
+  .topbar-in{height:56px}
+  .brand small{display:none}
+  .cap-row{grid-template-columns:54px 1fr;gap:12px;padding:14px 16px}
+  .sec-head{align-items:flex-start;gap:12px;flex-wrap:wrap}
+  .sec-meta{display:none}
+  .lc-strip{border-bottom:none}
+  .lc-strip .stage{flex:1 0 25%;font-size:12.5px;padding:11px 12px 10px;border-bottom:1px solid var(--line)}
+  .flow-row{grid-template-columns:44px 1fr}
+  .flow-row .tool{grid-column:2;overflow-wrap:anywhere}
+  .cmd-row{flex-wrap:wrap}
+  .cmd-row code{flex-basis:100%;order:3}
+  .foot-grid{grid-template-columns:repeat(2,1fr)}
+}
+</style>
+</head>
+<body>
+<!-- DIRECTION CONTRACT (v2 企业化)
+THESIS: 整页是一份企业级解决方案文档：品牌顶栏 + 分区导航；冷纸白底、深墨蓝、企业蓝强调；Hero 左侧需求陈述 + 右侧结构化能力面板；售前生命周期条、三类角色行、五步工作单、终端实录、证据与上手。
+REFUSES: 评审表签批表单（旧方向，纸白+朱砂红、红章、评分卡，已废弃）；暗底霓虹 AI 页；蓝色 SaaS 功能卡片栅格。
+CROSS-LINK: 顶栏与 Hero 提供「进入 Web 控制台」→ http://127.0.0.1:8000（生产部署替换为实际 URL）；webui 顶栏返回 → /gtm/。
+impeccable-disable numbered-section-markers -- 01/02/03/04/05 是五步工作单的功能性步骤序号，01/02/03 是上手命令步骤。 -->
+<a class="skip" href="#main">跳到主要内容</a>
+
+<header class="topbar">
+  <div class="sheet topbar-in">
+    <a class="brand" href="#main">
+      <span class="brand-mark">O</span>
+      OpenArch<small>SA 工作显性化</small>
+    </a>
+    <div class="topbar-spacer"></div>
+    <nav class="topnav" aria-label="页面导航">
+      <a href="#roles">岗位全景</a>
+      <a href="#workflow">第一张工作单</a>
+      <a href="#terminal">终端实录</a>
+      <a href="#skills">技能资产</a>
+      <a href="#evidence">边界与证据</a>
+      <a class="console-link" href="http://127.0.0.1:8000" target="_blank" rel="noopener">进入 Web 控制台</a>
+      <a class="gh-link" href="https://github.com/allengaller/open-arch" target="_blank" rel="noopener">
+        <svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true" fill="currentColor"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27s1.36.09 2 .27c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8Z"/></svg>
+        GitHub
+      </a>
+    </nav>
+  </div>
+</header>
+
+<main id="main">
+  <!-- ================= HERO ================= -->
+  <div class="sheet hero">
+    <div>
+      <h1>SA 的工作，<br>照单显形。</h1>
+      <p class="sub">OpenArch 是面向 Solutions Architect（售前全栈架构师）的开源工具箱：把岗位工作显性化为可审计的技能资产与可执行工作流。<b>新手跟练入职，在岗梳理标准，资深沉淀传承。</b>第一张已交付的工作单：架构设计。</p>
+      <div class="hero-actions">
+        <a class="btn btn-primary" href="http://127.0.0.1:8000" target="_blank" rel="noopener">进入 Web 控制台</a>
+        <a class="btn btn-secondary" href="https://github.com/allengaller/open-arch" target="_blank" rel="noopener">GitHub 仓库</a>
+      </div>
+      <p class="hero-hint">git clone open-arch && openarch · 本地一条命令启动</p>
+    </div>
+
+    <div class="cap" id="capPanel">
+      <div class="cap-head"><span>第一张工作单 · 架构设计</span><span class="tag">已交付</span></div>
+      <div class="cap-row">
+        <span class="idx">01</span>
+        <div><div class="name">需求澄清</div><div class="desc">把对话提炼成结构化需求卡，缺失必填项主动追问。</div><span class="meta">structure_requirements · OA-T01</span></div>
+      </div>
+      <div class="cap-row">
+        <span class="idx">02</span>
+        <div><div class="name">架构评审</div><div class="desc">按阿里云 WAF 五支柱逐项评估，输出综合评分与风险清单。</div><span class="meta">review_with_waf · OA-T04</span></div>
+      </div>
+      <div class="cap-row">
+        <span class="idx">03</span>
+        <div><div class="name">交付打包</div><div class="desc">需求卡、方案、架构图、评审结果组装为 Markdown 交付文档落盘。</div><span class="meta">export_deliverable · OA-T05</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= 一、岗位全景 ================= -->
+  <section id="roles">
+    <div class="sheet">
+      <div class="sec-head"><h2>岗位全景</h2><span class="sec-meta">售前全生命周期 · 三类 SA · 一套资产</span></div>
+      <p class="sec-lede">SA 的工作从来不止画架构图。OpenArch 按售前生命周期把岗位展开成连续的工作单：绿色的是已经闭环交付的，其余在路线图上，逐张补齐。</p>
+      <div class="lc-strip" role="list" aria-label="售前生命周期工作单">
+        <div class="stage" role="listitem">客户洞察<small>ROADMAP</small></div>
+        <div class="stage done" role="listitem">需求澄清<small>工作单 01 · 已交付</small></div>
+        <div class="stage done" role="listitem">方案设计<small>工作单 01 · 已交付</small></div>
+        <div class="stage done" role="listitem">架构评审<small>工作单 01 · 已交付</small></div>
+        <div class="stage" role="listitem">PoC 验证<small>ROADMAP</small></div>
+        <div class="stage" role="listitem">投标与交付<small>ROADMAP</small></div>
+        <div class="stage" role="listitem">复盘沉淀<small>ROADMAP</small></div>
+      </div>
+      <div class="role-head" aria-hidden="true"><span>角色</span><span>在这里拿到什么</span><span>留下什么证据</span></div>
+      <div class="role-row">
+        <div class="who"><span class="code">OA-P01</span><b>新手 SA</b><span>NEWCOMER · 0 → 1</span></div>
+        <div class="get"><b>岗位地图 + 逐步 SOP + 可跑通的示例项目。</b>跟着第一张工作单完整走一遍，看一个 SA 怎么把一句业务需求变成可交付的方案，跑通了就知道这个岗位每天在做什么。</div>
+        <div class="proof">亲手跑出的五件套交付物与完整演示工程，直接作为面试作品。<i>入职证据，自己生成</i></div>
+      </div>
+      <div class="role-row">
+        <div class="who"><span class="code">OA-P02</span><b>在岗 SA</b><span>IN ROLE · 标准化</span></div>
+        <div class="get"><b>把个人交付习惯梳理成版本化的技能包与清单。</b>需求怎么问、方案怎么选型、评审怎么过，每一单按同一套标准执行，经验不再只存在自己脑子里。</div>
+        <div class="proof">隐性经验升级为可审计、可复用的团队资产。<i>工作流，从个人到标准</i></div>
+      </div>
+      <div class="role-row">
+        <div class="who"><span class="code">OA-P03</span><b>资深 SA</b><span>SENIOR · 传承</span></div>
+        <div class="get"><b>把最佳实践写成可执行的技能资产。</b>方法论以 Markdown 沉淀在仓库里，Agent 照它执行，新人照它上手，团队的标准有了唯一的出处。</div>
+        <div class="proof">提交一个技能包，就是完成一次沉淀与传承。<i>资产进仓库，方法留得下</i></div>
+      </div>
+      <p class="roles-note">三类角色，同一套机制：<b>技能包承载方法论，工具保证结构化，工件落盘可校验。</b>你的阶段决定你怎么用它，不决定它能给你什么。</p>
+    </div>
+  </section>
+
+  <!-- ================= 二、第一张工作单：架构设计 ================= -->
+  <section id="workflow">
+    <div class="sheet">
+      <div class="sec-head"><h2>第一张工作单：架构设计</h2><span class="sec-meta">五步 · 五工具 · 五件套交付</span></div>
+      <p class="sec-lede">岗位全景里第一张闭环交付的工作单。它把一次架构设计固定为五个可校验的步骤，每一步由一个结构化工具承担，产出落盘的工件，而不是留在聊天记录里。新手从这张单入门，老 SA 用它校准自己的流程。</p>
+      <div class="flow">
+        <div class="flow-row">
+          <div class="idx">01</div>
+          <div class="step"><b>需求澄清</b><span>把对话提炼成结构化需求卡：业务场景、规模/并发、可用性目标、预算区间、合规约束。必填项缺失时主动追问。</span></div>
+          <div class="tool"><span class="tname">structure_requirements</span><span class="tnote">OA-T01 · 需求卡 schema</span></div>
+          <div class="artifact">需求卡 JSON<i>缺失必填项列表</i></div>
+        </div>
+        <div class="flow-row">
+          <div class="idx">02</div>
+          <div class="step"><b>方案生成</b><span>Agent 按需读取 arch-design 技能：场景模式识别 → 参考架构选型 → 组件选型，产出方案文档。</span></div>
+          <div class="tool"><span class="tname">skill: arch-design</span><span class="tnote">OA-SK-01 · 原生 Skill 接入</span></div>
+          <div class="artifact">方案文档<i>选型依据可追溯</i></div>
+        </div>
+        <div class="flow-row">
+          <div class="idx">03</div>
+          <div class="step"><b>架构图输出</b><span>生成 Mermaid 架构图，语法校验失败自动修正重试（上限 2 次），并导出可编辑的 draw.io 文件。</span></div>
+          <div class="tool"><span class="tname">validate_diagram · export_drawio</span><span class="tnote">OA-T02 / OA-T03 · 纯逻辑工具</span></div>
+          <div class="artifact">Mermaid + .drawio<i>校验通过才交付</i></div>
+        </div>
+        <div class="flow-row">
+          <div class="idx">04</div>
+          <div class="step"><b>WAF 评审</b><span>按 aliyun-waf 五支柱清单逐项评估，校验覆盖完整性，计算评分表与高风险项清单。</span></div>
+          <div class="tool"><span class="tname">review_with_waf</span><span class="tnote">OA-T04 · 机读清单</span></div>
+          <div class="artifact">五支柱评分表 + 风险清单<i>覆盖完整性校验</i></div>
+        </div>
+        <div class="flow-row">
+          <div class="idx">05</div>
+          <div class="step"><b>交付物打包</b><span>把需求卡、方案、架构图、评审结果组装为一份 Markdown 交付文档，写入 ./deliverables/。</span></div>
+          <div class="tool"><span class="tname">export_deliverable</span><span class="tnote">OA-T05 · 落盘交付</span></div>
+          <div class="artifact">Markdown 交付文档<i>五件套归档</i></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= 三、终端实录 ================= -->
+  <section id="terminal">
+    <div class="sheet">
+      <div class="sec-head"><h2>终端实录</h2><span class="sec-meta">launch_console · AgentScope 2.0</span></div>
+      <p class="sec-lede">MVP 的界面就是你的终端：流式输出、工具调用确认、Ctrl+C 中断。下面是一次完整跑通第一张工作单的演示会话，每个工具调用都是真实链路。</p>
+      <div class="term" id="term">
+        <div class="term-head">
+          <span class="dots" aria-hidden="true"><i></i><i></i><i></i></span>
+          <span>openarch · launch_console</span>
+          <span style="margin-left:auto" class="demo-tag">演示会话</span>
+        </div>
+        <div class="term-body">
+<pre><span class="t-line t-dim">$ openarch</span>
+<span class="t-line t-dim">AgentScope Console · OpenArch v0.1 · 就绪</span>
+<span class="t-line t-user">你 › 给一个日均 10 万订单的电商设计一套架构</span>
+<span class="t-line t-tool">agent › 调用 <b>structure_requirements</b> …</span>
+<span class="t-line t-warn">  ⚠ 缺失必填项：可用性目标、预算区间。请补充</span>
+<span class="t-line t-user">你 › 可用性 99.95%，预算每月 3 万以内</span>
+<span class="t-line t-tool">agent › <b>structure_requirements</b> → 需求卡 [OA-REQ-0001] ✓</span>
+<span class="t-line t-confirm">  [工具确认] 允许执行 review_with_waf ？(y/n) y</span>
+<span class="t-line t-agent">agent › 读取技能 arch-design · 场景模式：电商交易主链路</span>
+<span class="t-line t-agent">agent › 方案生成完成 · 选型依据 6 条已写入方案文档</span>
+<span class="t-line t-tool">agent › <b>validate_diagram</b> → Mermaid 语法通过 ✓</span>
+<span class="t-line t-tool">agent › <b>export_drawio</b> → deliverables/oa-0001.drawio ✓</span>
+<span class="t-line t-tool">agent › <b>review_with_waf</b> → 五支柱 91.4 · 高风险 2 项</span>
+<span class="t-line t-ok">  · 卓越运营 92 / 安全性 88 / 可靠性 95 / 性能 93 / 成本 89</span>
+<span class="t-line t-tool">agent › <b>export_deliverable</b> → deliverables/oa-0001.md ✓</span>
+<span class="t-line t-file">交付完成：5 件套已归档 → ./deliverables/</span></pre>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= 四、技能资产 ================= -->
+  <section id="skills">
+    <div class="sheet">
+      <div class="sec-head"><h2>技能资产</h2><span class="sec-meta">Markdown · 可审计 · 可替换</span></div>
+      <p class="sec-lede">工作显性化的载体就是技能包：方法论文档是产品本体，Agent 是执行器。每个技能包是一个目录：SKILL.md + 知识正文 + 交付模板，经 AgentScope Toolkit 原生接入，Agent 按需读取。</p>
+      <div class="skills">
+        <div class="skill-row">
+          <div class="code">OA-SK-01</div>
+          <div class="sname">arch-design<span>skills/arch-design</span></div>
+          <div class="sdesc">需求分析框架、常见场景模式（Web 应用 / 数据平台 / AI 推理服务等）、选型决策树。</div>
+          <div class="ssrc">自研方法论 + 公开最佳实践</div>
+        </div>
+        <div class="skill-row">
+          <div class="code">OA-SK-02</div>
+          <div class="sname">aliyun-waf<span>skills/aliyun-waf</span></div>
+          <div class="sdesc">Well-Architected 五支柱检查清单与问卷条目，结构化供 review_with_waf 机读。</div>
+          <div class="ssrc">阿里云公开 WAF 文档 · 逐条可溯源</div>
+        </div>
+        <div class="skill-row">
+          <div class="code">OA-SK-03</div>
+          <div class="sname">sa-playbooks<span>skills/sa-playbooks</span></div>
+          <div class="sdesc">上云评估、迁移、成本优化等交付 SOP 与模板。</div>
+          <div class="ssrc">通用 SA 交付实践</div>
+        </div>
+      </div>
+      <p class="skills-note">技能内容面向开源社区：<b>不含任何内部资料或客户敏感信息</b>，每一条知识公开可溯源。想换成自己团队的方法论？改 Markdown 就行：知识、模型、端点全部可插拔。</p>
+    </div>
+  </section>
+
+  <!-- ================= 五、边界与证据 ================= -->
+  <section id="evidence">
+    <div class="sheet">
+      <div class="sec-head"><h2>边界与证据</h2><span class="sec-meta">路线图不冒充现状</span></div>
+      <p class="sec-lede">这是开源项目，能力边界写在明面上：哪些工作单已经闭环，哪些还在路上。给评估者、未来的自己，和每一位考虑投入时间的 SA 一张诚实的表。</p>
+      <div class="ev-grid">
+        <div class="ev-col now">
+          <h3>现在就能用<small>MVP · 已实现</small></h3>
+          <ul>
+            <li><span class="mono">OA-C01</span><b>第一张工作单：架构设计</b><span>需求澄清到交付打包五步闭环，工具自动修正重试</span></li>
+            <li><span class="mono">OA-C02</span><b>AgentScope 2.0 运行时</b><span>ReActAgent + Toolkit + launch_console</span></li>
+            <li><span class="mono">OA-C03</span><b>三个技能包</b><span>Markdown 承载，框架原生接入，可改写可扩充</span></li>
+            <li><span class="mono">OA-C04</span><b>模型可换</b><span>DashScope 默认，任意 OpenAI 兼容端点</span></li>
+            <li><span class="mono">OA-C05</span><b>Docker 交互式运行</b><span>docker compose run openarch</span></li>
+          </ul>
+        </div>
+        <div class="ev-col">
+          <h3>在路线图上<small>NOT YET · 别当现状</small></h3>
+          <ul>
+            <li><span class="mono">OA-R01</span><b>售前其余工作环节</b><span>客户洞察 / PoC 验证 / 投标支持 / 交付复盘</span></li>
+            <li><span class="mono">OA-R02</span><b>学习路径与技能树</b><span>新手成长地图，按阶段定位能力缺口</span></li>
+            <li><span class="mono">OA-R03</span><b>产品级浏览器 Web UI</b><span>基于 Agent Service + 官方 Web UI 扩展</span></li>
+            <li><span class="mono">OA-R04</span><b>客户管理与交付沉淀</b><span>客户档案、交付记录、复盘积累</span></li>
+            <li><span class="mono">OA-R05</span><b>Runtime 服务化与多云知识包</b><span>容器化多用户部署，AWS / Azure 选型知识</span></li>
+          </ul>
+        </div>
+      </div>
+      <div class="ev-base">
+        <div class="cell"><span class="mono">TESTING</span><b>单元测试 CI 必跑</b><span>Mermaid 校验器、drawio 转换、需求卡 schema、WAF 评分逻辑、技能包 lint，无需 API Key。</span></div>
+        <div class="cell"><span class="mono">E2E</span><b>端到端冒烟</b><span>真实 Key 跑通五件套断言：需求卡 → 方案 → Mermaid → WAF 评分 → 交付文档。</span></div>
+        <div class="cell"><span class="mono">SPEC</span><b>设计规格先行</b><span>MVP 设计文档与需求方逐节确认后实施，仓库内可查。</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= 六、上手 ================= -->
+  <section id="start">
+    <div class="sheet start-grid">
+      <div>
+        <h2>一条命令，<br>展开这个岗位。</h2>
+        <p class="s-lede">clone、配一个 Key、进终端。没有数据库、没有账号系统、没有后台服务。新手把第一张工作单完整跑通，老 SA 把自己的方法论换进去。</p>
+        <div class="start-links">
+          <a class="btn btn-primary" href="http://127.0.0.1:8000" target="_blank" rel="noopener">进入 Web 控制台</a>
+          <a class="btn btn-secondary" href="https://github.com/allengaller/open-arch/blob/main/docs/superpowers/specs/2026-08-28-openarch-sa-platform-design.md" target="_blank" rel="noopener">读设计 spec</a>
+        </div>
+      </div>
+      <div>
+        <div class="cmdlist">
+          <div class="cmd-row"><span class="n">01</span><code id="cmd1">git clone https://github.com/allengaller/open-arch.git</code><button type="button" data-copy="cmd1">复制</button></div>
+          <div class="cmd-row"><span class="n">02</span><code id="cmd2">cd open-arch && cp .env.example .env && uv sync</code><button type="button" data-copy="cmd2">复制</button></div>
+          <div class="cmd-row"><span class="n">03</span><code id="cmd3">openarch</code><button type="button" data-copy="cmd3">复制</button></div>
+        </div>
+        <p class="cmd-note">// 在 .env 填入 DASHSCOPE_API_KEY（或设 OPENARCH_BASE_URL 接任意 OpenAI 兼容端点）</p>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="sheet">
+    <div class="foot-grid">
+      <div><span class="lbl">文档编号</span>OA-GTM-2026-001</div>
+      <div><span class="lbl">版本</span>v2.0</div>
+      <div><span class="lbl">许可</span><a href="https://github.com/allengaller/open-arch/blob/main/LICENSE" target="_blank" rel="noopener">Apache-2.0</a></div>
+      <div><span class="lbl">仓库</span><a href="https://github.com/allengaller/open-arch" target="_blank" rel="noopener">allengaller/open-arch</a></div>
+      <div><span class="lbl">运行时</span>AgentScope 2.0</div>
+      <div><span class="lbl">状态</span>公开 · MVP</div>
+    </div>
+    <div class="foot-line">
+      <span>OpenArch — 把售前架构师的工作显性化的开源工具箱</span>
+      <span>本页终端会话为演示数据，均已标注。能力现状见「边界与证据」</span>
+    </div>
+  </div>
+</footer>
+
+<script>
+(function(){
+  var doc=document.documentElement;doc.classList.add('js');
+  var reduce=window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  /* 复制按钮 */
+  document.querySelectorAll('[data-copy]').forEach(function(btn){
+    btn.addEventListener('click',function(){
+      var code=document.getElementById(btn.getAttribute('data-copy'));
+      var text=code.textContent;
+      function done(){btn.textContent='已复制';btn.classList.add('done');setTimeout(function(){btn.textContent='复制';btn.classList.remove('done');},1600);}
+      if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(text).then(done,done);}else{done();}
+    });
+  });
+
+  /* 能力面板行入场 */
+  var cap=document.getElementById('capPanel');
+  if(!reduce&&cap&&'IntersectionObserver' in window){
+    var io=new IntersectionObserver(function(entries){
+      entries.forEach(function(e){
+        if(!e.isIntersecting)return;
+        io.disconnect();cap.classList.add('play');
+      });
+    },{threshold:.3});
+    io.observe(cap);
+  }
+
+  /* 终端行渐显 */
+  var term=document.getElementById('term');
+  if(!reduce&&term&&'IntersectionObserver' in window){
+    var lines=term.querySelectorAll('.t-line');
+    lines.forEach(function(l,i){l.style.transitionDelay=(i*90)+'ms';});
+    var played=false;
+    var io2=new IntersectionObserver(function(entries){
+      entries.forEach(function(e){
+        if(!e.isIntersecting||played)return;
+        played=true;io2.disconnect();term.classList.add('play');
+      });
+    },{threshold:.25});
+    io2.observe(term);
+  }
+})();
+</script>
+</body>
+</html>

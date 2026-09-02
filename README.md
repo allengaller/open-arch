@@ -6,6 +6,16 @@
 
 需求澄清 → 方案生成 → Mermaid / draw.io 架构图 → 阿里云 Well-Architected 评审 → Markdown 交付文档
 
+## 📣 项目主页（GTM 营销页）
+
+OpenArch 的对外门面 —— 完整介绍产品定位、三类用户、售前生命周期、第一张工作单的端到端示例、终端实录、路线图与上手命令。
+
+- 本地打开：直接用浏览器打开仓库内的 [`GTM/index.html`](./GTM/index.html)（无依赖，纯静态）
+- GitHub Pages（启用 Pages 后）：<https://allengaller.github.io/open-arch/GTM/>
+- 设计语言：纸白 + 墨黑 + 朱砂红三色，连续规则线表单拓扑；详见 [DESIGN.md](./DESIGN.md)
+
+> 两条不同的浏览器面：这里的 **GTM 营销页** 是静态定位 deck；下方的 **Web UI** 是 `uv run openarch web` 起的运行时产品控制台。
+
 ## 特性
 
 - **架构设计 Copilot（工作单 01）**：结构化需求卡驱动，缺失信息主动追问，产出可编辑的交付物
@@ -28,6 +38,8 @@ Docker：
 
 ## Web UI（浏览器）
 
+> 这一节是产品 *运行时* 浏览器界面（Agent 控制台 + 交付物面板），与上方的 **GTM 营销页** 不是同一回事。
+
     uv run openarch web        # 默认 http://127.0.0.1:8000
     # 或
     uv run openarch web --host 0.0.0.0 --port 9000
@@ -40,6 +52,8 @@ Docker：
 - 左栏：会话列表 + 新建会话
 - 中间：聊天主区，实时流式回复，Mermaid 架构图自动渲染
 - 右栏：交付物面板，Markdown 在线预览、draw.io 文件下载
+
+页面间互通：webui 顶栏提供「返回项目主页 → `/gtm/`」（服务端同源挂载仓库 `GTM/` 目录）；[`GTM/index.html`](./GTM/index.html) 的顶栏与 Hero 提供「进入 Web 控制台」回到控制台地址。
 
 前端开发模式：
 

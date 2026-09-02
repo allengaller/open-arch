@@ -66,6 +66,14 @@ export default function App() {
   if (!ready) return <div className="boot">加载中…</div>
   return (
     <div className="app">
+      <header className="appbar">
+        <span className="brand">
+          <span className="brand-mark">O</span>
+          OpenArch<small>控制台</small>
+        </span>
+        <span className="appbar-spacer" />
+        <a className="gtm-link" href="/gtm/" rel="noopener">返回项目主页 →</a>
+      </header>
       <SessionSidebar
         sessions={sessions}
         currentId={current?.id ?? null}
