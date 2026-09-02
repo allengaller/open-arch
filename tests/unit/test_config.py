@@ -53,3 +53,17 @@ def test_workspace_and_skills_dir_overrides(tmp_path):
     )
     assert s.workspace == tmp_path / "out"
     assert s.skills_dir == tmp_path / "skills"
+
+
+def test_db_parent_dir_created_for_default_path(tmp_path, monkeypatch):
+    monkeypatch.chdir(tmp_path)
+    s = load_settings(env={"DASHSCOPE_API_KEY": "sk-test"})
+    assert s.db == tmp_path / "data" / "openarch.db"
+    assert s.db.parent.is_dir()
+
+
+def test_db_parent_dir_created_for_custom_deep_path(tmp_path):
+    db = tmp_path / "a" / "b" / "openarch.db"
+    s = load_settings(env={"DASHSCOPE_API_KEY": "sk-test", "OPENARCH_DB": str(db)})
+    assert s.db == db
+    assert s.db.parent.is_dir()

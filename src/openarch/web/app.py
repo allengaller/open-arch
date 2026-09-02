@@ -59,19 +59,8 @@ def create_web_app(settings: Settings) -> FastAPI:
         """前端启动引导所需的服务端配置（不含任何密钥）。"""
         return {"model": settings.model}
 
-    static_dir = find_static_dir()
-    if static_dir is None:
-        logger.warning(
-            "未找到 webui 静态产物（webui/dist 或包内 static/dist），静态托管已禁用；"
-            "请执行 `npm run build`（见 webui/README）。"
-        )
-    else:
-        app.mount(
-            "/",
-            StaticFiles(directory=static_dir, html=True),
-            name="webui",
-        )
-
+    # /gtm 必须先于根挂载注册：Mount("/") 按注册顺序捕获所有路径，
+    # 顺序颠倒会让 /gtm/ 落进 webui dist 而返回 404。
     gtm_dir = find_gtm_dir()
     if gtm_dir is None:
         logger.warning(
@@ -83,5 +72,18 @@ def create_web_app(settings: Settings) -> FastAPI:
             "/gtm",
             StaticFiles(directory=gtm_dir, html=True),
             name="gtm",
+        )
+
+    static_dir = find_static_dir()
+    if static_dir is None:
+        logger.warning(
+            "未找到 webui 静态产物（webui/dist 或包内 static/dist），静态托管已禁用；"
+            "请执行 `npm run build`（见 webui/README）。"
+        )
+    else:
+        app.mount(
+            "/",
+            StaticFiles(directory=static_dir, html=True),
+            name="webui",
         )
     return app

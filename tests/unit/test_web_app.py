@@ -36,6 +36,24 @@ def test_static_mount_when_dist_exists(tmp_path, monkeypatch):
         assert "openarch-ok" in resp.text
 
 
+def test_gtm_mount_not_swallowed_by_root_mount(tmp_path, monkeypatch):
+    # Mount("/") 按注册顺序捕获所有路径：/gtm 必须先于 webui 根挂载注册，
+    # 否则 /gtm/ 落进 webui dist 找不到文件而 404。
+    dist = tmp_path / "dist"
+    dist.mkdir()
+    (dist / "index.html").write_text("<html>openarch-ok</html>")
+    gtm = tmp_path / "gtm"
+    gtm.mkdir()
+    (gtm / "index.html").write_text("<html>gtm-ok</html>")
+    monkeypatch.setattr("openarch.web.app.find_static_dir", lambda: dist)
+    monkeypatch.setattr("openarch.web.app.find_gtm_dir", lambda: gtm)
+
+    app = create_web_app(_settings(tmp_path))
+    with TestClient(app) as client:
+        assert "gtm-ok" in client.get("/gtm/").text
+        assert "openarch-ok" in client.get("/").text
+
+
 def _with_candidates(monkeypatch, *dirs):
     monkeypatch.setattr("openarch.web.app._STATIC_CANDIDATES", dirs)
 

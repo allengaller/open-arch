@@ -199,7 +199,7 @@ section{border-top:1px solid var(--line)}
   display:block;font-family:var(--mono);font-size:10px;
   letter-spacing:.1em;color:var(--ink-55);margin-top:4px;
 }
-.lc-strip .stage.done{color:var(--ink);font-weight:700;background:#fff}
+.lc-strip .stage.done{color:var(--ink);font-weight:700;background:var(--surface)}
 .lc-strip .stage.done small{color:var(--success);font-weight:700}
 
 /* 角色行 */
@@ -401,6 +401,7 @@ footer{border-top:1px solid var(--line-strong);background:var(--paper-2)}
   .ev-base{grid-template-columns:1fr}
   .ev-base .cell{border-right:none;border-bottom:1px solid var(--line)}
   .start-grid{grid-template-columns:1fr}
+  .start-grid>*{min-width:0}
   .foot-grid{grid-template-columns:repeat(3,1fr)}
 }
 @media (max-width:600px){

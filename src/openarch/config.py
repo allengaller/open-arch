@@ -52,6 +52,7 @@ def load_settings(env: dict[str, str] | None = None) -> Settings:
     skills_dir = Path(e.get("OPENARCH_SKILLS_DIR") or default_skills).expanduser().resolve()
 
     db = Path(e.get("OPENARCH_DB") or "./data/openarch.db").expanduser().resolve()
+    db.parent.mkdir(parents=True, exist_ok=True)
     web_port_raw = e.get("OPENARCH_PORT")
 
     return Settings(

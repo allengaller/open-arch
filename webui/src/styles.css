@@ -154,3 +154,15 @@ body {
 .btn-danger { background: var(--danger); border-color: var(--danger); color: #fff; }
 .btn-ghost { border: 0; background: transparent; }
 .muted { color: var(--ink-55); font-size: 13px; }
+
+/* ---- 窄屏逐级降为单区（240+260 固定侧栏在 390 视口会横向溢出） ---- */
+@media (max-width: 960px) {
+  .files { display: none; }
+  .sidebar { width: 200px; }
+}
+@media (max-width: 640px) {
+  .sidebar { display: none; }
+  .chat-scroll { padding: 16px; }
+  .chat-input { padding: 10px 16px 12px; }
+  .chat-error { margin: 0 16px 8px; }
+}
