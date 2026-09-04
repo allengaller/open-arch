@@ -2,10 +2,13 @@ from openarch.agent import SYSTEM_PROMPT
 from openarch.config import load_settings
 from openarch.web.bootstrap import run_bootstrap
 
+DUMMY_VALUE_A = "dummy-value-a"
+DUMMY_VALUE_B = "dummy-value-b"
+
 
 def _settings(tmp_path):
     return load_settings(
-        env={"DASHSCOPE_API_KEY": "sk-test", "OPENARCH_DB": str(tmp_path / "t.db")}
+        env={"DASHSCOPE_API_KEY": DUMMY_VALUE_A, "OPENARCH_DB": str(tmp_path / "t.db")}
     )
 
 
@@ -38,7 +41,7 @@ async def test_bootstrap_openai_compat_mode(tmp_path):
     s = load_settings(
         env={
             "OPENARCH_BASE_URL": "https://api.example.com/v1",
-            "OPENARCH_API_KEY": "key-1",
+            "OPENARCH_API_KEY": DUMMY_VALUE_A,
             "OPENARCH_DB": str(tmp_path / "c.db"),
         }
     )
@@ -58,18 +61,18 @@ async def test_credential_rotation(tmp_path):
 
     db = tmp_path / "r.db"
     s1 = load_settings(
-        env={"DASHSCOPE_API_KEY": "sk-A", "OPENARCH_DB": str(db)}
+        env={"DASHSCOPE_API_KEY": DUMMY_VALUE_A, "OPENARCH_DB": str(db)}
     )
     await run_bootstrap(s1)
     s2 = load_settings(
-        env={"DASHSCOPE_API_KEY": "sk-B", "OPENARCH_DB": str(db)}
+        env={"DASHSCOPE_API_KEY": DUMMY_VALUE_B, "OPENARCH_DB": str(db)}
     )
     info = await run_bootstrap(s2)
     storage = AsyncSQLAlchemyStorage(f"sqlite+aiosqlite:///{db}")
     async with storage:
         creds = await storage.list_credentials("local")
     assert len(creds) == 1
-    assert creds[0].data["api_key"] == "sk-B"
+    assert creds[0].data["api_key"] == DUMMY_VALUE_B
     assert info.credential_id == creds[0].id
 
 
@@ -101,7 +104,7 @@ async def test_agent_prompt_reassert(tmp_path):
             ),
         )
     s = load_settings(
-        env={"DASHSCOPE_API_KEY": "sk-test", "OPENARCH_DB": str(db)}
+        env={"DASHSCOPE_API_KEY": DUMMY_VALUE_A, "OPENARCH_DB": str(db)}
     )
     await run_bootstrap(s)
     storage2 = AsyncSQLAlchemyStorage(f"sqlite+aiosqlite:///{db}")

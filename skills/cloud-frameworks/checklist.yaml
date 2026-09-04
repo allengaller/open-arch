@@ -1,0 +1,31 @@
+# 阿里云 Landing Zone 六要素基线检查清单
+# 与 content/aliyun-landing-zone.md 六大要素一一对应；Landing Zone 交付前逐项核对（每项给出 pass/risk/fail 与 evidence）
+pillars:
+  账号体系:
+    - {id: ACCT-01, description: 已启用资源目录（RD），业务资源集中在成员账号，管理账号无业务资源}
+    - {id: ACCT-02, description: 资源夹按业务线/环境划分（Core/Security/Log/Suspended），账号命名与开户规范明确}
+    - {id: ACCT-03, description: 生产与非生产资源隔离在不同账号，误操作影响面有边界}
+    - {id: ACCT-04, description: 可信服务已配置委派管理员，管理账号仅承担管控职能}
+  身份权限:
+    - {id: ID-01, description: 人员访问统一走 RAM/IMS 并通过 SSO 对接企业 IDP，无共享账号}
+    - {id: ID-02, description: 跨账号访问以 RAM 角色扮演为主，无长期明文 AccessKey}
+    - {id: ID-03, description: 权限满足最小权限原则，高危操作有临时提权与审批流程}
+    - {id: ID-04, description: 管控策略（Control Policy）已在资源夹/账号层预防性限制高危操作}
+  网络规划:
+    - {id: NET-01, description: 有全局 CIDR 规划表，与 IDC 网段不重叠且预留增长空间}
+    - {id: NET-02, description: 跨账号/跨地域互通统一走云企业网 CEN，无 VPC 网状对等}
+    - {id: NET-03, description: 公网出入口收口（集中 NAT/统一 WAF 入口），无业务私自开公网}
+    - {id: NET-04, description: 混合云连接（专线/VPN）有冗余链路并演练过切换}
+  合规安全:
+    - {id: COMP-01, description: 配置审计已启用合规包（等保 2.0/CIS），持续评估并配置自动修复}
+    - {id: COMP-02, description: ActionTrail 全账号操作审计集中投递 Log 账号 SLS，留存 ≥180 天}
+    - {id: COMP-03, description: 生产运维经堡垒机收口并留存录像，无直连实例}
+    - {id: COMP-04, description: 密钥集中 KMS 管理，传输与静态数据已加密}
+  财务治理:
+    - {id: FIN-01, description: 财务单元/费用标签体系覆盖全部业务账号，账单可分账到业务责任人}
+    - {id: FIN-02, description: 预算与异常告警已配置并送达责任人，有超支响应机制}
+    - {id: FIN-03, description: RI/节省计划有集中管理与定期优化复盘机制}
+  自动化:
+    - {id: AUTO-01, description: Landing Zone 结构与基线由 IaC（Terraform/ROS）管理，环境可重建}
+    - {id: AUTO-02, description: 新账号开通自动挂基线（日志投递/合规包/网络接入/财务单元）}
+    - {id: AUTO-03, description: 合规偏差有自动检测与修复/派单的闭环机制}

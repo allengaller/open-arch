@@ -4,7 +4,7 @@ import yaml
 
 SKILLS_DIR = Path(__file__).parents[2] / "skills"
 
-EXPECTED = {"arch-design", "aliyun-waf", "sa-playbooks"}
+EXPECTED = {"arch-design", "aliyun-waf", "sa-playbooks", "cloud-frameworks"}
 
 
 def test_every_skill_has_valid_frontmatter():
@@ -24,6 +24,13 @@ def test_referenced_content_files_exist():
     expected_content = {
         "arch-design": {"content/patterns.md", "content/decision-tree.md"},
         "sa-playbooks": {"content/cloud-assessment.md", "content/cost-optimization.md"},
+        "cloud-frameworks": {
+            "content/aws-caf.md",
+            "content/aliyun-landing-zone.md",
+            "content/well-architected.md",
+            "content/cross-cloud-mapping.md",
+            "checklist.yaml",
+        },
     }
     for name, files in expected_content.items():
         for rel in files:

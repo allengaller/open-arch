@@ -3,6 +3,8 @@ from agentscope.model import DashScopeChatModel, OpenAIChatModel
 from openarch.agent import build_agent
 from openarch.config import load_settings
 
+DUMMY_VALUE = "dummy-value"
+
 
 def test_build_agent_with_fake_key(tmp_path):
     skills = tmp_path / "skills"
@@ -12,7 +14,7 @@ def test_build_agent_with_fake_key(tmp_path):
         encoding="utf-8",
     )
     settings = load_settings(
-        env={"DASHSCOPE_API_KEY": "sk-test", "OPENARCH_SKILLS_DIR": str(skills)}
+        env={"DASHSCOPE_API_KEY": DUMMY_VALUE, "OPENARCH_SKILLS_DIR": str(skills)}
     )
     agent = build_agent(settings)
     assert isinstance(agent.model, DashScopeChatModel)
@@ -22,9 +24,9 @@ def test_build_agent_with_fake_key(tmp_path):
 def test_build_agent_with_openai_compatible(tmp_path):
     settings = load_settings(
         env={
-            "DASHSCOPE_API_KEY": "sk-test",
+            "DASHSCOPE_API_KEY": DUMMY_VALUE,
             "OPENARCH_BASE_URL": "http://localhost:8000/v1",
-            "OPENARCH_API_KEY": "sk-local",
+            "OPENARCH_API_KEY": DUMMY_VALUE,
         }
     )
     agent = build_agent(settings)

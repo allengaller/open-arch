@@ -3,10 +3,12 @@ from fastapi.testclient import TestClient
 from openarch.config import load_settings
 from openarch.web.app import _STATIC_CANDIDATES, create_web_app, find_static_dir
 
+DUMMY_VALUE = "dummy-value"
+
 
 def _settings(tmp_path):
     return load_settings(
-        env={"DASHSCOPE_API_KEY": "sk-test", "OPENARCH_DB": str(tmp_path / "app.db")}
+        env={"DASHSCOPE_API_KEY": DUMMY_VALUE, "OPENARCH_DB": str(tmp_path / "app.db")}
     )
 
 
