@@ -16,6 +16,8 @@ const API_PREFIXES = [
 ]
 
 export default defineConfig({
+  // Meoo CDN 为静态托管：相对 base 保证产物在任何子路径下资源可达
+  base: './',
   plugins: [react()],
   server: {
     port: 5173,

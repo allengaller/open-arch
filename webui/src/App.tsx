@@ -1,7 +1,9 @@
 import { useCallback, useEffect, useState } from 'react'
 import { ChatPane } from './ChatPane'
+import { DemoConsole } from './DemoConsole'
 import { DeliverablesPane } from './DeliverablesPane'
 import { api } from './lib/api'
+import { isBootFailure } from './lib/demo'
 import type { SessionSummary } from './lib/api'
 import { SessionSidebar } from './SessionSidebar'
 
@@ -16,6 +18,7 @@ export default function App() {
   const [sessions, setSessions] = useState<SessionSummary[]>([])
   const [current, setCurrent] = useState<SessionSummary | null>(null)
   const [error, setError] = useState('')
+  const [demo, setDemo] = useState(false)
   const [ready, setReady] = useState(false)
 
   useEffect(() => {
@@ -34,7 +37,12 @@ export default function App() {
         )
         setReady(true)
       } catch (e) {
-        setError(String(e))
+        if (isBootFailure(e)) {
+          setDemo(true)
+          setReady(true)
+        } else {
+          setError(String(e))
+        }
       }
     })()
   }, [])
@@ -63,6 +71,7 @@ export default function App() {
   }, [ctx, refreshSessions])
 
   if (error) return <div className="boot boot-error">启动失败：{error}</div>
+  if (demo) return <DemoConsole />
   if (!ready) return <div className="boot">加载中…</div>
   return (
     <div className="app">
@@ -72,7 +81,7 @@ export default function App() {
           OpenArch<small>控制台</small>
         </span>
         <span className="appbar-spacer" />
-        <a className="gtm-link" href="/gtm/" rel="noopener">返回项目主页 →</a>
+        <a className="gtm-link" href="/gtm/index.html" rel="noopener">返回项目主页 →</a>
       </header>
       <SessionSidebar
         sessions={sessions}

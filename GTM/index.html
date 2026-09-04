@@ -11,7 +11,7 @@
 <style>
 /* Hallmark · genre: modern-minimal · macrostructure: Solution Document · design-system: DESIGN.md · designed-as-app
  * enterprise console: paper #f7f8fa · ink #0f1728 · accent #1f4fd8 · danger #b91c1c
- * signature: capability panel row reveal, terminal line reveal; cross-link to /gtm/ from webui
+ * signature: capability panel row reveal, terminal line reveal; cross-link to /gtm/index.html from webui
  */
 :root{
   --paper:#f7f8fa;
@@ -430,7 +430,7 @@ footer{border-top:1px solid var(--line-strong);background:var(--paper-2)}
 <!-- DIRECTION CONTRACT (v2 企业化)
 THESIS: 整页是一份企业级解决方案文档：品牌顶栏 + 分区导航；冷纸白底、深墨蓝、企业蓝强调；Hero 左侧需求陈述 + 右侧结构化能力面板；售前生命周期条、三类角色行、五步工作单、终端实录、证据与上手。
 REFUSES: 评审表签批表单（旧方向，纸白+朱砂红、红章、评分卡，已废弃）；暗底霓虹 AI 页；蓝色 SaaS 功能卡片栅格。
-CROSS-LINK: 顶栏与 Hero 提供「进入 Web 控制台」→ http://127.0.0.1:8000（生产部署替换为实际 URL）；webui 顶栏返回 → /gtm/。
+CROSS-LINK: 顶栏与 Hero 提供「进入 Web 控制台」→ /（同源根路径：本地 openarch web 与 Meoo CDN 均指向控制台）；webui 顶栏返回 → /gtm/index.html（Meoo CDN 不做目录索引解析，需完整文件路径）。
 impeccable-disable numbered-section-markers -- 01/02/03/04/05 是五步工作单的功能性步骤序号，01/02/03 是上手命令步骤。 -->
 <a class="skip" href="#main">跳到主要内容</a>
 
@@ -447,7 +447,7 @@ impeccable-disable numbered-section-markers -- 01/02/03/04/05 是五步工作单
       <a href="#terminal">终端实录</a>
       <a href="#skills">技能资产</a>
       <a href="#evidence">边界与证据</a>
-      <a class="console-link" href="http://127.0.0.1:8000" target="_blank" rel="noopener">进入 Web 控制台</a>
+      <a class="console-link" href="/" target="_blank" rel="noopener">进入 Web 控制台</a>
       <a class="gh-link" href="https://github.com/allengaller/open-arch" target="_blank" rel="noopener">
         <svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true" fill="currentColor"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27s1.36.09 2 .27c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8Z"/></svg>
         GitHub
@@ -463,7 +463,7 @@ impeccable-disable numbered-section-markers -- 01/02/03/04/05 是五步工作单
       <h1>SA 的工作，<br>照单显形。</h1>
       <p class="sub">OpenArch 是面向 Solutions Architect（售前全栈架构师）的开源工具箱：把岗位工作显性化为可审计的技能资产与可执行工作流。<b>新手跟练入职，在岗梳理标准，资深沉淀传承。</b>第一张已交付的工作单：架构设计。</p>
       <div class="hero-actions">
-        <a class="btn btn-primary" href="http://127.0.0.1:8000" target="_blank" rel="noopener">进入 Web 控制台</a>
+        <a class="btn btn-primary" href="/" target="_blank" rel="noopener">进入 Web 控制台</a>
         <a class="btn btn-secondary" href="https://github.com/allengaller/open-arch" target="_blank" rel="noopener">GitHub 仓库</a>
       </div>
       <p class="hero-hint">git clone open-arch && openarch · 本地一条命令启动</p>
@@ -664,7 +664,7 @@ impeccable-disable numbered-section-markers -- 01/02/03/04/05 是五步工作单
         <h2>一条命令，<br>展开这个岗位。</h2>
         <p class="s-lede">clone、配一个 Key、进终端。没有数据库、没有账号系统、没有后台服务。新手把第一张工作单完整跑通，老 SA 把自己的方法论换进去。</p>
         <div class="start-links">
-          <a class="btn btn-primary" href="http://127.0.0.1:8000" target="_blank" rel="noopener">进入 Web 控制台</a>
+          <a class="btn btn-primary" href="/" target="_blank" rel="noopener">进入 Web 控制台</a>
           <a class="btn btn-secondary" href="https://github.com/allengaller/open-arch/blob/main/docs/superpowers/specs/2026-08-28-openarch-sa-platform-design.md" target="_blank" rel="noopener">读设计 spec</a>
         </div>
       </div>

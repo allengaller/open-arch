@@ -52,11 +52,24 @@ body {
 .appbar .gtm-link{display:inline-flex;align-items:center;gap:6px;text-decoration:none;color:var(--accent);font-size:13.5px;font-weight:600;padding:6px 10px;border-radius:6px}
 .appbar .gtm-link:hover{background:var(--accent-soft)}
 
+/* ---- 演示模式（无后端静态托管时的降级界面） ---- */
+.demo-banner{
+  position:absolute;top:48px;left:0;right:0;z-index:9;height:34px;
+  display:flex;align-items:center;justify-content:center;padding:0 16px;
+  background:var(--accent-soft);border-bottom:1px solid #c7d4ff;
+  color:var(--accent-deep);font-size:13px;font-weight:600;text-align:center;
+}
+.demo-banner code{font-family:var(--mono);font-size:12px;background:#fff;border:1px solid #c7d4ff;border-radius:4px;padding:1px 5px}
+.demo-banner-short{display:none}
+.demo-app > .sidebar,
+.demo-app > .chat,
+.demo-app > .files{margin-top:82px;height:calc(100% - 82px)}
+
 /* 三区容器：app 若带 appbar，用 flex 布局时让它占据剩余高度 */
 .app{position:relative}
 .appbar + .sidebar,
 .appbar + .chat,
-.appbar + .files{height:calc(100% - 48px)}
+.appbar + .files{margin-top:48px;height:calc(100% - 48px)}
 
 /* ---- 会话侧栏 ---- */
 .sidebar {
@@ -165,4 +178,8 @@ body {
   .chat-scroll { padding: 16px; }
   .chat-input { padding: 10px 16px 12px; }
   .chat-error { margin: 0 16px 8px; }
+  .demo-banner-full { display: none; }
+  .demo-banner-short { display: inline; }
+  .demo-banner { font-size: 12px; }
+  .demo-app .appbar .brand small { display: none; }
 }

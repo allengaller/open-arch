@@ -65,7 +65,7 @@ def create_web_app(settings: Settings) -> FastAPI:
     if gtm_dir is None:
         logger.warning(
             "未找到 GTM 营销页（仓库 GTM/ 或包内 static/gtm），"
-            "webui「返回项目主页 → /gtm/」入口将不可用。"
+            "webui「返回项目主页 → /gtm/index.html」入口将不可用。"
         )
     else:
         app.mount(
