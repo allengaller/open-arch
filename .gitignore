@@ -8,3 +8,5 @@ deliverables/
 dist/
 .impeccable/
 webui/dist/
+data/
+*.db
