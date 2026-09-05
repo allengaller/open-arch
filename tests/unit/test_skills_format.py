@@ -65,6 +65,11 @@ def test_referenced_content_files_exist():
             "content/industry-compliance.md",
             "content/global-expansion.md",
             "content/capability-model.md",
+            "content/customer-segments.md",
+            "content/customer-situations.md",
+            "content/scenario-playbooks.md",
+            "content/self-playbook.md",
+            "content/internal-process.md",
             "checklist.yaml",
         },
     }
