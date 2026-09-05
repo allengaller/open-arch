@@ -52,6 +52,44 @@ body {
 .appbar .gtm-link{display:inline-flex;align-items:center;gap:6px;text-decoration:none;color:var(--accent);font-size:13.5px;font-weight:600;padding:6px 10px;border-radius:6px}
 .appbar .gtm-link:hover{background:var(--accent-soft)}
 
+/* ---- 顶栏视图切换（控制台 / 知识库） ---- */
+.view-tabs{display:flex;gap:2px;background:var(--paper-2);border:1px solid var(--line);border-radius:6px;padding:2px}
+.view-tab{border:0;background:transparent;padding:5px 14px;border-radius:5px;font-size:13px;font-weight:600;color:var(--ink-70);cursor:pointer}
+.view-tab:hover{color:var(--ink)}
+.view-tab.active{background:#fff;color:var(--ink);box-shadow:0 1px 2px rgba(15,23,40,.08)}
+
+/* ---- 知识库视图 ---- */
+.knowledge{flex:1;display:flex;min-width:0;background:var(--paper)}
+.appbar + .knowledge{margin-top:48px;height:calc(100% - 48px)}
+.k-nav{width:280px;flex-shrink:0;overflow-y:auto;background:#fff;border-right:1px solid var(--line);padding:10px 8px 24px}
+.k-pack{margin-bottom:10px}
+.k-pack-name{font-size:13.5px;font-weight:700;padding:8px 10px 2px;font-family:var(--mono)}
+.k-pack-desc{font-size:12px;color:var(--ink-55);padding:0 10px 6px;line-height:1.5}
+.k-file{display:block;width:100%;text-align:left;border:0;background:transparent;padding:6px 10px 6px 18px;font-size:13px;cursor:pointer;border-radius:4px;color:var(--ink-70);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.k-file:hover{background:var(--paper-2);color:var(--ink)}
+.k-file.active{background:var(--accent-soft);color:var(--accent-deep);font-weight:600}
+.k-main{flex:1;overflow-y:auto;padding:28px 40px}
+.k-main .msg{max-width:920px;margin:0 auto;border:0;background:transparent;padding:0}
+.k-loading,.k-error{color:var(--ink-55);font-size:13.5px;max-width:920px;margin:0 auto}
+.k-error{color:var(--danger)}
+
+/* ---- Markdown 通用增强（知识文档大量使用表格与多级标题，聊天区同样受益） ---- */
+.md h1,.md h2,.md h3,.md h4{line-height:1.35;margin:1.2em 0 .5em;font-weight:700}
+.md h1{font-size:22px}
+.md h2{font-size:19px}
+.md h3{font-size:16.5px}
+.md h4{font-size:15px}
+.md p{margin:.6em 0}
+.md ul,.md ol{padding-left:1.4em;margin:.5em 0}
+.md li{margin:.25em 0}
+.md blockquote{border-left:3px solid var(--line-strong);padding:2px 12px;color:var(--ink-70);margin:.8em 0}
+.md hr{border:0;border-top:1px solid var(--line);margin:1.2em 0}
+.md table{border-collapse:collapse;width:100%;margin:.8em 0;font-size:13.5px;display:block;overflow-x:auto}
+.md th,.md td{border:1px solid var(--line);padding:6px 10px;text-align:left;vertical-align:top}
+.md th{background:var(--paper-2);font-weight:700}
+.md code{font-family:var(--mono);font-size:.9em;background:var(--paper-2);border:1px solid var(--line);border-radius:4px;padding:1px 5px}
+.md pre code{border:0;background:transparent;padding:0}
+
 /* ---- 演示模式（无后端静态托管时的降级界面） ---- */
 .demo-banner{
   position:absolute;top:48px;left:0;right:0;z-index:9;height:34px;
@@ -172,6 +210,8 @@ body {
 @media (max-width: 960px) {
   .files { display: none; }
   .sidebar { width: 200px; }
+  .k-nav { width: 210px; }
+  .k-main { padding: 20px; }
 }
 @media (max-width: 640px) {
   .sidebar { display: none; }
@@ -182,4 +222,7 @@ body {
   .demo-banner-short { display: inline; }
   .demo-banner { font-size: 12px; }
   .demo-app .appbar .brand small { display: none; }
+  .knowledge { flex-direction: column; }
+  .k-nav { width: auto; max-height: 40%; border-right: 0; border-bottom: 1px solid var(--line); }
+  .k-main { padding: 16px; }
 }

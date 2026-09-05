@@ -2,6 +2,7 @@ import { useCallback, useEffect, useState } from 'react'
 import { ChatPane } from './ChatPane'
 import { DemoConsole } from './DemoConsole'
 import { DeliverablesPane } from './DeliverablesPane'
+import { KnowledgePane } from './KnowledgePane'
 import { api } from './lib/api'
 import { isBootFailure } from './lib/demo'
 import type { SessionSummary } from './lib/api'
@@ -13,6 +14,8 @@ export interface AppCtx {
   model: string
 }
 
+type View = 'console' | 'knowledge'
+
 export default function App() {
   const [ctx, setCtx] = useState<AppCtx | null>(null)
   const [sessions, setSessions] = useState<SessionSummary[]>([])
@@ -20,6 +23,7 @@ export default function App() {
   const [error, setError] = useState('')
   const [demo, setDemo] = useState(false)
   const [ready, setReady] = useState(false)
+  const [view, setView] = useState<View>('console')
 
   useEffect(() => {
     ;(async () => {
@@ -80,17 +84,37 @@ export default function App() {
           <span className="brand-mark">O</span>
           OpenArch<small>控制台</small>
         </span>
+        <nav className="view-tabs" aria-label="视图切换">
+          <button
+            className={view === 'console' ? 'view-tab active' : 'view-tab'}
+            onClick={() => setView('console')}
+          >
+            控制台
+          </button>
+          <button
+            className={view === 'knowledge' ? 'view-tab active' : 'view-tab'}
+            onClick={() => setView('knowledge')}
+          >
+            知识库
+          </button>
+        </nav>
         <span className="appbar-spacer" />
         <a className="gtm-link" href="/gtm/index.html" rel="noopener">返回项目主页 →</a>
       </header>
-      <SessionSidebar
-        sessions={sessions}
-        currentId={current?.id ?? null}
-        onSelect={setCurrent}
-        onCreate={createSession}
-      />
-      <ChatPane ctx={ctx!} session={current} onSessionsChanged={refreshSessions} />
-      <DeliverablesPane ctx={ctx!} sessionId={current?.id ?? null} />
+      {view === 'knowledge' ? (
+        <KnowledgePane />
+      ) : (
+        <>
+          <SessionSidebar
+            sessions={sessions}
+            currentId={current?.id ?? null}
+            onSelect={setCurrent}
+            onCreate={createSession}
+          />
+          <ChatPane ctx={ctx!} session={current} onSessionsChanged={refreshSessions} />
+          <DeliverablesPane ctx={ctx!} sessionId={current?.id ?? null} />
+        </>
+      )}
     </div>
   )
 }

@@ -19,7 +19,7 @@ OpenArch 的对外门面 —— 完整介绍产品定位、三类用户、售前
 ## 特性
 
 - **架构设计 Copilot（工作单 01）**：结构化需求卡驱动，缺失信息主动追问，产出可编辑的交付物
-- **SA 技能库**：`skills/` 下的 SKILL.md 技能包（方法论、CAF/Landing Zone/WAF 顶层框架、WAF 清单、交付 playbook），由 AgentScope 原生 Skill 机制加载，欢迎贡献
+- **SA 技能库**：`skills/` 下的 SKILL.md 技能包（方法论、架构师概念库、CAF/Landing Zone/WAF 顶层框架、WAF 清单、交付 playbook），由 AgentScope 原生 Skill 机制加载，欢迎贡献
 - **全家桶**：AgentScope `Agent` + `Toolkit` + `launch_console`，无数据库、一条命令启动
 
 ## 快速开始
@@ -49,6 +49,7 @@ Docker：
 
 浏览器打开 `http://127.0.0.1:8000`：
 
+- 顶栏：「控制台 / 知识库」视图切换；知识库浏览 `skills/` 全部知识正文（`/openarch/skills` 只读端点）
 - 左栏：会话列表 + 新建会话
 - 中间：聊天主区，实时流式回复，Mermaid 架构图自动渲染
 - 右栏：交付物面板，Markdown 在线预览、draw.io 文件下载

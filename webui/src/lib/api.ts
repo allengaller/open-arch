@@ -33,8 +33,26 @@ export interface DirectoryEntryRaw {
   updated_at: string | null
 }
 
+export interface SkillPack {
+  name: string
+  description: string
+  files: string[]
+}
+
 export const api = {
   config: () => req<OpenArchConfig>('/openarch/config'),
+
+  listSkills: () => req<{ skills: SkillPack[] }>('/openarch/skills'),
+
+  skillText: async (pack: string, path: string): Promise<string> => {
+    const encoded = path.split('/').map(encodeURIComponent).join('/')
+    const resp = await fetch(
+      `/openarch/skills/${encodeURIComponent(pack)}/${encoded}`,
+      { headers: { 'X-User-ID': USER_ID } },
+    )
+    if (!resp.ok) throw new Error(`读取知识文件失败：HTTP ${resp.status}`)
+    return resp.text()
+  },
 
   agentId: async (): Promise<string> => {
     const data = await req<{ agents: { id: string; data: { name: string } }[] }>('/agent/')
