@@ -201,6 +201,8 @@ section{border-top:1px solid var(--line)}
 }
 .lc-strip .stage.done{color:var(--ink);font-weight:700;background:var(--surface)}
 .lc-strip .stage.done small{color:var(--success);font-weight:700}
+.lc-strip .stage.partial{color:var(--ink);background:var(--surface)}
+.lc-strip .stage.partial small{color:var(--warning);font-weight:700}
 
 /* 角色行 */
 .role-head{
@@ -492,7 +494,7 @@ impeccable-disable numbered-section-markers -- 01/02/03/04/05 是五步工作单
       <div class="sec-head"><h2>岗位全景</h2><span class="sec-meta">售前全生命周期 · 三类 SA · 一套资产</span></div>
       <p class="sec-lede">SA 的工作从来不止画架构图。OpenArch 按售前生命周期把岗位展开成连续的工作单：绿色的是已经闭环交付的，其余在路线图上，逐张补齐。</p>
       <div class="lc-strip" role="list" aria-label="售前生命周期工作单">
-        <div class="stage" role="listitem">客户洞察<small>ROADMAP</small></div>
+        <div class="stage partial" role="listitem">客户洞察<small>打法知识已备 · SK-06</small></div>
         <div class="stage done" role="listitem">需求澄清<small>工作单 01 · 已交付</small></div>
         <div class="stage done" role="listitem">方案设计<small>工作单 01 · 已交付</small></div>
         <div class="stage done" role="listitem">架构评审<small>工作单 01 · 已交付</small></div>
@@ -629,6 +631,12 @@ impeccable-disable numbered-section-markers -- 01/02/03/04/05 是五步工作单
           <div class="sdesc">架构师基础概念库：云基础、网络、计算、存储、架构原则、可靠性、安全、可观测、成本、数据与 AI 十域术语与要点。</div>
           <div class="ssrc">公开技术文档 · 术语对齐</div>
         </div>
+        <div class="skill-row">
+          <div class="code">OA-SK-06</div>
+          <div class="sname">cloud-sa-playbook<span>skills/cloud-sa-playbook</span></div>
+          <div class="sdesc">云 SA 获客与打单打法：四类获客渠道全景、线索分配与优先级、铁三角（BD+SA+交付）分工与全周期配合节奏。</div>
+          <div class="ssrc">一线售前实践整理</div>
+        </div>
       </div>
       <p class="skills-note">技能内容面向开源社区：<b>不含任何内部资料或客户敏感信息</b>，每一条知识公开可溯源。想换成自己团队的方法论？改 Markdown 就行：知识、模型、端点全部可插拔。全部知识正文已在 Web 控制台的「知识库」视图开放浏览，<a href="/" target="_blank" rel="noopener">进入控制台 → 知识库</a> 即可阅读。</p>
     </div>
@@ -645,7 +653,7 @@ impeccable-disable numbered-section-markers -- 01/02/03/04/05 是五步工作单
           <ul>
             <li><span class="mono">OA-C01</span><b>第一张工作单：架构设计</b><span>需求澄清到交付打包五步闭环，工具自动修正重试</span></li>
             <li><span class="mono">OA-C02</span><b>AgentScope 2.0 运行时</b><span>ReActAgent + Toolkit + launch_console</span></li>
-            <li><span class="mono">OA-C03</span><b>五个技能包</b><span>方法论 + 顶层框架 + 基础概念库，Markdown 承载，可改写可扩充</span></li>
+            <li><span class="mono">OA-C03</span><b>六个技能包</b><span>方法论 + 顶层框架 + 基础概念库 + 获客打法，Markdown 承载，可改写可扩充</span></li>
             <li><span class="mono">OA-C04</span><b>模型可换</b><span>DashScope 默认，任意 OpenAI 兼容端点</span></li>
             <li><span class="mono">OA-C05</span><b>Docker 交互式运行</b><span>docker compose run openarch</span></li>
             <li><span class="mono">OA-C06</span><b>Web 控制台与知识库</b><span>会话 + 交付物预览 + 技能知识浏览（/openarch/skills 只读端点）</span></li>
@@ -697,7 +705,7 @@ impeccable-disable numbered-section-markers -- 01/02/03/04/05 是五步工作单
   <div class="sheet">
     <div class="foot-grid">
       <div><span class="lbl">文档编号</span>OA-GTM-2026-001</div>
-      <div><span class="lbl">版本</span>v2.0</div>
+      <div><span class="lbl">版本</span>v2.1</div>
       <div><span class="lbl">许可</span><a href="https://github.com/allengaller/open-arch/blob/main/LICENSE" target="_blank" rel="noopener">Apache-2.0</a></div>
       <div><span class="lbl">仓库</span><a href="https://github.com/allengaller/open-arch" target="_blank" rel="noopener">allengaller/open-arch</a></div>
       <div><span class="lbl">运行时</span>AgentScope 2.0</div>

@@ -51,7 +51,7 @@ def _skill_meta(skill_dir: Path) -> dict | None:
         return None
     try:
         meta = yaml.safe_load(skill_md.read_text(encoding="utf-8").split("---")[1]) or {}
-    except Exception:
+    except (IndexError, yaml.YAMLError):
         meta = {}
     files = sorted(
         str(p.relative_to(skill_dir))

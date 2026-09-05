@@ -101,7 +101,8 @@ body {
 .demo-banner-short{display:none}
 .demo-app > .sidebar,
 .demo-app > .chat,
-.demo-app > .files{margin-top:82px;height:calc(100% - 82px)}
+.demo-app > .files,
+.demo-app > .knowledge{margin-top:82px;height:calc(100% - 82px)}
 
 /* 三区容器：app 若带 appbar，用 flex 布局时让它占据剩余高度 */
 .app{position:relative}
