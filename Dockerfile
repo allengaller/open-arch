@@ -19,6 +19,7 @@ RUN --mount=type=cache,target=/root/.cache/uv uv sync --frozen --no-dev --no-ins
 
 COPY src/ ./src/
 COPY skills/ ./skills/
+COPY GTM/ ./GTM/
 COPY tests/ ./tests/
 RUN --mount=type=cache,target=/root/.cache/uv uv sync --frozen --no-dev
 

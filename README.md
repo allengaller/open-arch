@@ -93,7 +93,7 @@ Docker：
 
 ## 路线图
 
-售前其余工作环节（客户洞察 / PoC 验证 / 投标支持 / 交付复盘）→ 学习路径与技能树 → 浏览器 Web UI（Agent Service）→ 客户管理与交付沉淀 → Runtime 服务化与多云知识包（AWS / Azure）
+售前其余工作环节（客户洞察 / PoC 验证 / 投标支持 / 交付复盘）→ 学习路径与技能树 → Web UI 产品化（多用户与账号体系）→ 客户管理与交付沉淀 → Runtime 服务化与多云知识包扩充（AWS / Azure）
 
 ## License
 

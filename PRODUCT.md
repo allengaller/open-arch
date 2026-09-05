@@ -8,7 +8,7 @@ web
 
 ## Stack
 
-纯静态 HTML/CSS/JS（用户确认）：零构建、零依赖，GTM 单页放 `GTM/` 目录，可部署到任意静态托管。仓库其余部分为纯 Python（AgentScope 2.0）后端，无前端基建。
+后端为纯 Python（AgentScope 2.0）。两条浏览器面：GTM 营销页为零构建单页 HTML/CSS/JS（`GTM/` 目录，任意静态托管可部署）；产品控制台为 React 19 + TypeScript + Vite（`webui/` 目录，`openarch web` 静态托管于 `/`，演示模式无后端自动降级）。
 
 ## Users
 
@@ -29,14 +29,14 @@ OpenArch 是面向 SA 的开源工具箱与职业提升平台，核心命题是*
 ## Operating Context
 
 - 使用场景：新手跟练岗位工作流并产出入职证据；在岗 SA 梳理并标准化自己的交付流程；资深 SA 沉淀/维护技能包；开源社区评估与二次开发；求职作品集展示。
-- 入口：`openarch` 命令进入终端聊天（AgentScope launch_console：流式输出、工具调用确认、Ctrl+C 中断）；Docker 交互式运行。
+- 入口：`openarch` 命令进入终端聊天（AgentScope launch_console：流式输出、工具调用确认、Ctrl+C 中断）；`openarch web` 启动浏览器控制台（会话 + 交付物 + 知识库视图，`/openarch/skills` 只读端点）；Docker 交互式运行。
 - 配置：`DASHSCOPE_API_KEY`（或 `OPENARCH_BASE_URL` 指向 OpenAI 兼容端点）；交付物落盘 `./deliverables/`。
 
 ## Capabilities and Constraints
 
-- MVP 能力：第一张工作单「架构设计」五步链路；三个技能包（arch-design / aliyun-waf / sa-playbooks）；五个结构化工具（structure_requirements、validate_diagram、export_drawio、review_with_waf、export_deliverable）。
-- 技术约束：Python ≥ 3.11；AgentScope 2.0（`Agent`/`Toolkit`/`launch_console` API）；无数据库、无用户系统；MVP UI 为终端聊天。
-- 路线图（页面叙事不得当作现有能力）：售前其余工作环节覆盖（客户洞察 / PoC 验证 / 投标支持 / 交付复盘）、学习路径与技能树（新手成长地图）、产品级浏览器 Web UI、客户管理与交付沉淀、Runtime 容器化部署、多云知识包（AWS/Azure）。
+- MVP 能力：第一张工作单「架构设计」五步链路；六个技能包（arch-design / aliyun-waf / sa-playbooks / cloud-frameworks / sa-concepts / cloud-sa-playbook）；五个结构化工具（structure_requirements、validate_diagram、export_drawio、review_with_waf、export_deliverable）；Web 控制台三区布局 + 知识库视图（技能包 Markdown 正文浏览）。
+- 技术约束：Python ≥ 3.11；AgentScope 2.0（`Agent`/`Toolkit`/`launch_console` API）；Web 模式使用 SQLite（启动幂等种子，无用户系统）；终端聊天与浏览器控制台双入口。
+- 路线图（页面叙事不得当作现有能力）：售前其余工作单闭环（客户洞察 / PoC 验证 / 投标支持 / 交付复盘——获客打法知识已在 cloud-sa-playbook）、学习路径与技能树、Web UI 产品化（多用户与账号体系）、客户管理与交付沉淀、Runtime 容器化多用户部署、多云知识包扩充（AWS/Azure 选型）。
 - Non-Goals：多租户/鉴权、自建持久化、SOP 执行引擎（路线图之外不做承诺）。
 
 ## Brand Commitments

@@ -33,10 +33,11 @@ export function KnowledgePane({ notice }: { notice?: string }) {
       try {
         const { skills } = await api.listSkills()
         setPacks(skills)
-        // 默认展开第一个技能包的第一篇正文，跳过 SKILL.md 说明页
+        // 默认展开第一个技能包的第一篇 Markdown 正文（跳过 SKILL.md 说明页与机读清单）
         const first = skills[0]
         if (first) {
-          const file = first.files.find((f) => f !== 'SKILL.md') ?? first.files[0]
+          const file =
+            first.files.find((f) => f.endsWith('.md') && f !== 'SKILL.md') ?? first.files[0]
           if (file) await loadFile(first.name, file)
         }
       } catch (e) {

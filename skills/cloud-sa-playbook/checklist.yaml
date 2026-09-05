@@ -1,0 +1,40 @@
+# 云 SA 五大作战检查清单
+# 与 content/ 各 playbook 一一对应；进入对应环节前逐项核对（每项给出 done/na 与 evidence）
+checklists:
+  商机启动:
+    # 对应 content/acquisition-channels.md + content/iron-triangle.md
+    - {id: OP-01, description: 客户归属与行业线确认，无撞单；BD/SA 责任分工与商机级别已定}
+    - {id: OP-02, description: 优先级四因子评分完成（存量/质量/复杂度/竞争），投入深度按级别匹配}
+    - {id: OP-03, description: 决策链初步摸底（EB/TB/UB/Coach），关键人触达计划明确}
+    - {id: OP-04, description: 预算与采购时间窗确认，无预算纯比价单已劝退}
+    - {id: OP-05, description: 竞争态势登记（同台者与动向），作战室与信息同步节奏已建立}
+    - {id: OP-06, description: 客户档案建卷：组织权力地图、技术画像、交互记录开始维护}
+  POC启动:
+    # 对应 content/poc-playbook.md
+    - {id: POC-01, description: 三问已答：验证什么指标、结果如何影响决策、谁拍板认可}
+    - {id: POC-02, description: 成功标准（3-5 条可量化指标）、时间盒、双方投入人已书面确认}
+    - {id: POC-03, description: 范围锁定与变更机制约定；竞品同台时对比规则书面明确}
+    - {id: POC-04, description: 测试数据合规约定（脱敏/留存/销毁），环境与网络就绪}
+    - {id: POC-05, description: 周报节奏与升级路径确定，客户工程师参与测试用例设计}
+  投标交稿:
+    # 对应 content/bidding-support.md
+    - {id: BID-01, description: 标书解读表完成：评分项/资质门槛/废标项逐条核对，负偏离清零或有补偿}
+    - {id: BID-02, description: 技术标结构映射评分项，点对点应答无漏条，证明材料齐备}
+    - {id: BID-03, description: 技术/商务/报价三表规格数量一致，专人逐页核对}
+    - {id: BID-04, description: 资质与授权函件（原厂/伙伴）已走完流程，盖章文件在有效期内}
+    - {id: BID-05, description: 讲标分工明确，预演 ≥2 次，Q&A 题库含"最不想被问的问题"}
+    - {id: BID-06, description: 定标前合同技术附件复核排期确认（SLA/验收标准可实现性）}
+  迁移割接:
+    # 对应 content/migration-playbook.md
+    - {id: CUT-01, description: 依赖图评审通过无未确认项；目标规格按 P95 峰值核定}
+    - {id: CUT-02, description: runbook 到分钟级（步骤/执行人/验证命令），回滚触发条件与当场决策人明确}
+    - {id: CUT-03, description: 增量同步延迟达标，DNS/TTL 已提前调整}
+    - {id: CUT-04, description: 验证清单就绪（冒烟/核心链路/性能基线/监控告警/备份），客户签字放行}
+    - {id: CUT-05, description: 值守安排与升级路径确认，客户侧配合人到位}
+  续费90天:
+    # 对应 content/account-deepening.md
+    - {id: REN-01, description: 到期资源与消费预测盘点完成，续费或降量预案已定}
+    - {id: REN-02, description: 健康分与流失预警复核，异常信号已升级并制定保卫计划}
+    - {id: REN-03, description: 巡检/QBR 近期已完成，成本节省与新场景路线图已上桌面}
+    - {id: REN-04, description: 客户采购流程周期确认（政企 1-3 个月），启动时间倒排}
+    - {id: REN-05, description: 报价方案（续费折扣+增购打包）与 BD 对齐，折扣审批已预沟通}
