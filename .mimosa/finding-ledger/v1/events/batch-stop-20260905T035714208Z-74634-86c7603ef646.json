@@ -1,0 +1,94 @@
+{
+  "schemaVersion": "mimosa-finding-ledger-batch/v1",
+  "batchId": "stop-20260905T035714208Z-74634-86c7603ef646",
+  "runId": "20260905T035714208Z-74634-86c7603ef646",
+  "runStatus": "inconclusive",
+  "coverage": {
+    "status": "partial",
+    "reasons": [
+      {
+        "code": "scanner_failed",
+        "stage": "scan",
+        "target": "webui/src/lib/knowledge.ts",
+        "detail": "spawnSync /Users/allengaller/.hermes/node/bin/node ETIMEDOUT",
+        "affectsCompletion": true
+      },
+      {
+        "code": "scanner_failed",
+        "stage": "scan",
+        "target": "webui/src/lib/knowledge.test.ts",
+        "detail": "spawnSync /Users/allengaller/.hermes/node/bin/node ETIMEDOUT",
+        "affectsCompletion": true
+      },
+      {
+        "code": "scanner_failed",
+        "stage": "scan",
+        "target": "webui/src/KnowledgePane.tsx",
+        "detail": "spawnSync /Users/allengaller/.hermes/node/bin/node ETIMEDOUT",
+        "affectsCompletion": true
+      },
+      {
+        "code": "scanner_failed",
+        "stage": "scan",
+        "target": "webui/src/DemoConsole.tsx",
+        "detail": "spawnSync /Users/allengaller/.hermes/node/bin/node ETIMEDOUT",
+        "affectsCompletion": true
+      },
+      {
+        "code": "scanner_failed",
+        "stage": "scan",
+        "target": "src/openarch/web/app.py",
+        "detail": "spawnSync /Users/allengaller/.hermes/node/bin/node ETIMEDOUT",
+        "affectsCompletion": true
+      },
+      {
+        "code": "project_check_failed",
+        "stage": "scan",
+        "target": "webui/src/lib/knowledge.ts",
+        "detail": "scanner_failed: spawnSync /Users/allengaller/.hermes/node/bin/node ETIMEDOUT",
+        "affectsCompletion": true
+      },
+      {
+        "code": "project_check_failed",
+        "stage": "scan",
+        "target": "webui/src/lib/knowledge.test.ts",
+        "detail": "scanner_failed: spawnSync /Users/allengaller/.hermes/node/bin/node ETIMEDOUT",
+        "affectsCompletion": true
+      },
+      {
+        "code": "project_check_failed",
+        "stage": "scan",
+        "target": "webui/src/KnowledgePane.tsx",
+        "detail": "scanner_failed: spawnSync /Users/allengaller/.hermes/node/bin/node ETIMEDOUT",
+        "affectsCompletion": true
+      },
+      {
+        "code": "project_check_failed",
+        "stage": "scan",
+        "target": "webui/src/DemoConsole.tsx",
+        "detail": "scanner_failed: spawnSync /Users/allengaller/.hermes/node/bin/node ETIMEDOUT",
+        "affectsCompletion": true
+      },
+      {
+        "code": "project_check_failed",
+        "stage": "scan",
+        "target": "src/openarch/web/app.py",
+        "detail": "scanner_failed: spawnSync /Users/allengaller/.hermes/node/bin/node ETIMEDOUT",
+        "affectsCompletion": true
+      }
+    ]
+  },
+  "source": {
+    "component": "zcode-hook",
+    "operationId": "Stop"
+  },
+  "revision": "a5f94d59fd285be74237a57b065b9107f8a7844e",
+  "diffHash": "84f21b6e873dbc69b900de730f25e5f7002dcdb9775b7a2fc2a8c13c7e4d9137",
+  "rulesVersion": "unavailable",
+  "sessionHash": "25bef35a80a5b0b865c9580621ea02bdb9ecc3eaba73e62c0c3c8a3bd3363319",
+  "reportRef": ".mimosa/reports/task-review-sess_a6283ad3-5a91-4bb4-afb6-6b15e0668e3b-20260905T035714208Z-74634-86c7603ef646.json",
+  "events": [],
+  "observedFindingIds": [],
+  "verifiedFiles": [],
+  "recordedAt": "2026-09-05T03:57:15.139Z"
+}

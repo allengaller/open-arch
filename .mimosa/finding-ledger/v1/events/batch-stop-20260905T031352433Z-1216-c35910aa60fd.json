@@ -1,0 +1,54 @@
+{
+  "schemaVersion": "mimosa-finding-ledger-batch/v1",
+  "batchId": "stop-20260905T031352433Z-1216-c35910aa60fd",
+  "runId": "20260905T031352433Z-1216-c35910aa60fd",
+  "runStatus": "completed",
+  "coverage": {
+    "status": "complete",
+    "reasons": []
+  },
+  "source": {
+    "component": "zcode-hook",
+    "operationId": "Stop"
+  },
+  "revision": "00a3aaf16919286ba09df374c7bcab32d89c0061",
+  "diffHash": "9ddfd7daa0d511c958a2adcfc3bb5931334740faf2b75e2bf107fa5a8989fff8",
+  "rulesVersion": "unavailable",
+  "sessionHash": "25bef35a80a5b0b865c9580621ea02bdb9ecc3eaba73e62c0c3c8a3bd3363319",
+  "reportRef": ".mimosa/reports/task-review-sess_a6283ad3-5a91-4bb4-afb6-6b15e0668e3b-20260905T031352433Z-1216-c35910aa60fd.json",
+  "events": [],
+  "observedFindingIds": [],
+  "verifiedFiles": [
+    {
+      "file": "src/openarch/web/app.py",
+      "direct": "complete",
+      "projectContext": "partial"
+    },
+    {
+      "file": "tests/unit/test_skills_api.py",
+      "direct": "complete",
+      "projectContext": "partial"
+    },
+    {
+      "file": "webui/src/lib/api.ts",
+      "direct": "complete",
+      "projectContext": "partial"
+    },
+    {
+      "file": "webui/src/KnowledgePane.tsx",
+      "direct": "complete",
+      "projectContext": "partial"
+    },
+    {
+      "file": "webui/src/App.tsx",
+      "direct": "complete",
+      "projectContext": "partial"
+    },
+    {
+      "file": "tests/unit/test_skills_format.py",
+      "direct": "complete",
+      "projectContext": "partial"
+    }
+  ],
+  "recordedAt": "2026-09-05T03:13:53.032Z"
+}

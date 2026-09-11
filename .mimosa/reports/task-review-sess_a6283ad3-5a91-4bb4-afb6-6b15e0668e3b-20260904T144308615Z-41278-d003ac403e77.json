@@ -1,0 +1,349 @@
+{
+  "schema_version": "mimosa-task-review/v2",
+  "run_id": "20260904T144308615Z-41278-d003ac403e77",
+  "run_status": "inconclusive",
+  "errors": [
+    {
+      "stage": "scan",
+      "target": "tests/unit/test_skills_format.py",
+      "reason": "scanner_failed: spawnSync /Users/allengaller/.hermes/node/bin/node ETIMEDOUT"
+    },
+    {
+      "stage": "scan",
+      "target": "tests/unit/test_config.py",
+      "reason": "scanner_failed: spawnSync /Users/allengaller/.hermes/node/bin/node ETIMEDOUT"
+    },
+    {
+      "stage": "scan",
+      "target": "tests/unit/test_agent_build.py",
+      "reason": "scanner_failed: spawnSync /Users/allengaller/.hermes/node/bin/node ETIMEDOUT"
+    },
+    {
+      "stage": "scan",
+      "target": "tests/unit/test_web_bootstrap.py",
+      "reason": "scanner_failed: spawnSync /Users/allengaller/.hermes/node/bin/node ETIMEDOUT"
+    },
+    {
+      "stage": "scan",
+      "target": "tests/unit/test_web_app.py",
+      "reason": "scanner_failed: spawnSync /Users/allengaller/.hermes/node/bin/node ETIMEDOUT"
+    }
+  ],
+  "coverage": {
+    "schema_version": "mimosa-hook-coverage/v1",
+    "status": "partial",
+    "scope": "hook_observed_diff",
+    "baseline": {
+      "complete": true,
+      "captured_files": 52,
+      "candidate_limit": 5000,
+      "truncated": false,
+      "enumeration_error_count": 0,
+      "snapshot_error_count": 0,
+      "compensated_target_count": 5
+    },
+    "change_tracking": {
+      "touched_observed": 5,
+      "touched_retained": 5,
+      "truncated": false,
+      "bash_mutation": true,
+      "bash_discovered": 5,
+      "bash_discovery_limit": 80,
+      "bash_discovery_truncated": false
+    },
+    "candidates": {
+      "eligible_files": 5,
+      "selected_files": 5,
+      "limit": 20,
+      "truncated": false
+    },
+    "scanning": {
+      "required_files": 5,
+      "scanned_files": 0,
+      "skipped_files": 0,
+      "failed_files": 5,
+      "project_checks_required": 0,
+      "project_checks_completed": 0
+    },
+    "notification": {
+      "eligible_findings": 0,
+      "detailed_findings": 0,
+      "detail_limit": 3,
+      "truncated": false
+    },
+    "reason_counts": {
+      "scanner_failed": 5,
+      "project_check_failed": 5
+    },
+    "reasons": [
+      {
+        "code": "scanner_failed",
+        "stage": "scan",
+        "target": "tests/unit/test_skills_format.py",
+        "detail": "spawnSync /Users/allengaller/.hermes/node/bin/node ETIMEDOUT",
+        "affects_completion": true
+      },
+      {
+        "code": "scanner_failed",
+        "stage": "scan",
+        "target": "tests/unit/test_config.py",
+        "detail": "spawnSync /Users/allengaller/.hermes/node/bin/node ETIMEDOUT",
+        "affects_completion": true
+      },
+      {
+        "code": "scanner_failed",
+        "stage": "scan",
+        "target": "tests/unit/test_agent_build.py",
+        "detail": "spawnSync /Users/allengaller/.hermes/node/bin/node ETIMEDOUT",
+        "affects_completion": true
+      },
+      {
+        "code": "scanner_failed",
+        "stage": "scan",
+        "target": "tests/unit/test_web_bootstrap.py",
+        "detail": "spawnSync /Users/allengaller/.hermes/node/bin/node ETIMEDOUT",
+        "affects_completion": true
+      },
+      {
+        "code": "scanner_failed",
+        "stage": "scan",
+        "target": "tests/unit/test_web_app.py",
+        "detail": "spawnSync /Users/allengaller/.hermes/node/bin/node ETIMEDOUT",
+        "affects_completion": true
+      },
+      {
+        "code": "project_check_failed",
+        "stage": "scan",
+        "target": "tests/unit/test_skills_format.py",
+        "detail": "scanner_failed: spawnSync /Users/allengaller/.hermes/node/bin/node ETIMEDOUT",
+        "affects_completion": true
+      },
+      {
+        "code": "project_check_failed",
+        "stage": "scan",
+        "target": "tests/unit/test_config.py",
+        "detail": "scanner_failed: spawnSync /Users/allengaller/.hermes/node/bin/node ETIMEDOUT",
+        "affects_completion": true
+      },
+      {
+        "code": "project_check_failed",
+        "stage": "scan",
+        "target": "tests/unit/test_agent_build.py",
+        "detail": "scanner_failed: spawnSync /Users/allengaller/.hermes/node/bin/node ETIMEDOUT",
+        "affects_completion": true
+      },
+      {
+        "code": "project_check_failed",
+        "stage": "scan",
+        "target": "tests/unit/test_web_bootstrap.py",
+        "detail": "scanner_failed: spawnSync /Users/allengaller/.hermes/node/bin/node ETIMEDOUT",
+        "affects_completion": true
+      },
+      {
+        "code": "project_check_failed",
+        "stage": "scan",
+        "target": "tests/unit/test_web_app.py",
+        "detail": "scanner_failed: spawnSync /Users/allengaller/.hermes/node/bin/node ETIMEDOUT",
+        "affects_completion": true
+      }
+    ],
+    "reasons_truncated": false
+  },
+  "generated_at": "2026-09-04T14:43:08.615Z",
+  "session_id": "sess_a6283ad3-5a91-4bb4-afb6-6b15e0668e3b",
+  "target": ".",
+  "revision": "d0f9b1557ee251eaccf8c8d9c28429f5254521de",
+  "rules_version": "unavailable",
+  "diff_hash": "81088629f0e5a6731ab7bf57f8bdd6c7d304645bf4fc7a568a926d384ab09117",
+  "diff": {
+    "algorithm": "sha256",
+    "changed_file_count": 5,
+    "changed_files": [
+      {
+        "file": "tests/unit/test_agent_build.py",
+        "ranges": [
+          {
+            "start": 6,
+            "end": 7
+          },
+          {
+            "start": 17,
+            "end": 17
+          },
+          {
+            "start": 27,
+            "end": 27
+          },
+          {
+            "start": 29,
+            "end": 29
+          }
+        ],
+        "before_hash": "61afefcb4117d2be1c1df023e6c72774d3f9efa84df50333327965dd67a6ddad",
+        "after_hash": "4f35c9b9be299c9f7d9672d2378c4824a4c66e56ee74be7ca1413e23a51e395a"
+      },
+      {
+        "file": "tests/unit/test_config.py",
+        "ranges": [
+          {
+            "start": 5,
+            "end": 6
+          },
+          {
+            "start": 9,
+            "end": 9
+          },
+          {
+            "start": 13,
+            "end": 13
+          },
+          {
+            "start": 26,
+            "end": 26
+          },
+          {
+            "start": 28,
+            "end": 28
+          },
+          {
+            "start": 33,
+            "end": 33
+          },
+          {
+            "start": 41,
+            "end": 41
+          },
+          {
+            "start": 51,
+            "end": 51
+          },
+          {
+            "start": 62,
+            "end": 62
+          },
+          {
+            "start": 69,
+            "end": 69
+          }
+        ],
+        "before_hash": "5b78a569e2a9cf81d924b00a9f2585d428ef04a9878efc8297f84a1f02eeb8bb",
+        "after_hash": "b1a372e5b57a008a9b010b08f667a42b6fc3cd2c0e6c9040a239b7686036198e"
+      },
+      {
+        "file": "tests/unit/test_skills_format.py",
+        "ranges": [
+          {
+            "start": 7,
+            "end": 7
+          },
+          {
+            "start": 27,
+            "end": 33
+          }
+        ],
+        "before_hash": "fe5a137c74b305e1569f24f0e2b9fff95e7214845c5c9a9384f442d77d8fdb3b",
+        "after_hash": "1b81afb0bca7ae8d42f7195a2d6fe7dd779bac9be3e760094dd64ed31e59cc92"
+      },
+      {
+        "file": "tests/unit/test_web_app.py",
+        "ranges": [
+          {
+            "start": 6,
+            "end": 7
+          },
+          {
+            "start": 11,
+            "end": 11
+          }
+        ],
+        "before_hash": "3ffa4633c923d68132884f8146cff33432015bc495e4fda2ad9a0bf242de33b0",
+        "after_hash": "b446b6231fd3b9486055beb612beaafa3620665f7c2d1580d444490f81516a6a"
+      },
+      {
+        "file": "tests/unit/test_web_bootstrap.py",
+        "ranges": [
+          {
+            "start": 5,
+            "end": 7
+          },
+          {
+            "start": 11,
+            "end": 11
+          },
+          {
+            "start": 44,
+            "end": 44
+          },
+          {
+            "start": 64,
+            "end": 64
+          },
+          {
+            "start": 68,
+            "end": 68
+          },
+          {
+            "start": 75,
+            "end": 75
+          },
+          {
+            "start": 107,
+            "end": 107
+          }
+        ],
+        "before_hash": "b2d9c613ed63e0e04bdfef60025df2ec1c5a3d9eaf62abe41444ca0c78e70636",
+        "after_hash": "16f75aea58e97baf8e1036881eb1d68eac1e1402003b293132c06eca6e38cf47"
+      }
+    ]
+  },
+  "timing": {
+    "started_at": "2026-09-04T14:43:05.040Z",
+    "completed_at": "2026-09-04T14:43:08.615Z",
+    "duration_ms": 3575,
+    "measurement": "hook_wall_clock"
+  },
+  "tokens": {
+    "input": 0,
+    "output": 0,
+    "total": 0,
+    "model_calls": 0,
+    "measurement": "known-zero"
+  },
+  "telemetry": {
+    "schemaVersion": "mimosa-gate-telemetry/v1",
+    "profile": "gate",
+    "operation": "Stop",
+    "outcome": "partial/INCONCLUSIVE",
+    "latencyMs": 3575,
+    "peakMemoryBytes": 109379584,
+    "memoryMeasurement": "max-observed-process-rss",
+    "scannedFiles": 0,
+    "cache": {
+      "hits": 0,
+      "misses": 0,
+      "measurement": "not-applicable"
+    },
+    "denyCount": 0,
+    "tokens": {
+      "input": 0,
+      "output": 0,
+      "total": 0,
+      "modelCalls": 0,
+      "measurement": "known-zero"
+    }
+  },
+  "finding_count": 0,
+  "rewake_finding_count": 0,
+  "evidence_boundary": {
+    "scan": "candidate",
+    "static_fix_verification": "observed_static_only",
+    "runtime_verification": "not_performed"
+  },
+  "finding_events": [],
+  "findings": [],
+  "artifacts": {
+    "immutable_report": ".mimosa/reports/task-review-sess_a6283ad3-5a91-4bb4-afb6-6b15e0668e3b-20260904T144308615Z-41278-d003ac403e77.json",
+    "latest_report": ".mimosa/reports/task-review-sess_a6283ad3-5a91-4bb4-afb6-6b15e0668e3b.json",
+    "history_summary": ".mimosa/history/run-20260904T144308615Z-41278-d003ac403e77.json"
+  }
+}

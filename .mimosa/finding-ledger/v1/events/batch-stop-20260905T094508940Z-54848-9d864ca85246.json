@@ -1,0 +1,34 @@
+{
+  "schemaVersion": "mimosa-finding-ledger-batch/v1",
+  "batchId": "stop-20260905T094508940Z-54848-9d864ca85246",
+  "runId": "20260905T094508940Z-54848-9d864ca85246",
+  "runStatus": "completed",
+  "coverage": {
+    "status": "complete",
+    "reasons": []
+  },
+  "source": {
+    "component": "zcode-hook",
+    "operationId": "Stop"
+  },
+  "revision": "5e391a8e7e2c16e72504a80dc28fd5facfc992a2",
+  "diffHash": "e61202d074101a058aed4a2b6be2670aafceaff800582f21c730760a89c24acf",
+  "rulesVersion": "unavailable",
+  "sessionHash": "25bef35a80a5b0b865c9580621ea02bdb9ecc3eaba73e62c0c3c8a3bd3363319",
+  "reportRef": ".mimosa/reports/task-review-sess_a6283ad3-5a91-4bb4-afb6-6b15e0668e3b-20260905T094508940Z-54848-9d864ca85246.json",
+  "events": [],
+  "observedFindingIds": [],
+  "verifiedFiles": [
+    {
+      "file": "tests/unit/test_skills_format.py",
+      "direct": "complete",
+      "projectContext": "partial"
+    },
+    {
+      "file": "webui/src/KnowledgePane.tsx",
+      "direct": "complete",
+      "projectContext": "partial"
+    }
+  ],
+  "recordedAt": "2026-09-05T09:45:09.577Z"
+}

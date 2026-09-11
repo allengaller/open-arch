@@ -1,0 +1,43 @@
+{
+  "schemaVersion": "mimosa-finding-history/v1",
+  "runId": "20260904T144308615Z-41278-d003ac403e77",
+  "runStatus": "inconclusive",
+  "errors": [
+    "scan:tests/unit/test_skills_format.py: scanner_failed: spawnSync /Users/allengaller/.hermes/node/bin/node ETIMEDOUT",
+    "scan:tests/unit/test_config.py: scanner_failed: spawnSync /Users/allengaller/.hermes/node/bin/node ETIMEDOUT",
+    "scan:tests/unit/test_agent_build.py: scanner_failed: spawnSync /Users/allengaller/.hermes/node/bin/node ETIMEDOUT",
+    "scan:tests/unit/test_web_bootstrap.py: scanner_failed: spawnSync /Users/allengaller/.hermes/node/bin/node ETIMEDOUT",
+    "scan:tests/unit/test_web_app.py: scanner_failed: spawnSync /Users/allengaller/.hermes/node/bin/node ETIMEDOUT"
+  ],
+  "target": ".",
+  "revision": "d0f9b1557ee251eaccf8c8d9c28429f5254521de",
+  "diffHash": "81088629f0e5a6731ab7bf57f8bdd6c7d304645bf4fc7a568a926d384ab09117",
+  "rulesVersion": "unavailable",
+  "recordedAt": "2026-09-04T14:43:08.615Z",
+  "timing": {
+    "startedAt": "2026-09-04T14:43:05.040Z",
+    "completedAt": "2026-09-04T14:43:08.615Z",
+    "durationMs": 3575
+  },
+  "tokens": {
+    "input": 0,
+    "output": 0,
+    "total": 0,
+    "modelCalls": 0,
+    "measurement": "known-zero"
+  },
+  "findings": {
+    "total": 0,
+    "bySeverity": {},
+    "byStatus": {}
+  },
+  "coverage": {
+    "status": "partial",
+    "reasonCounts": {
+      "scanner_failed": 5,
+      "project_check_failed": 5
+    }
+  },
+  "evidenceBoundary": "static_only",
+  "immutableReport": ".mimosa/reports/task-review-sess_a6283ad3-5a91-4bb4-afb6-6b15e0668e3b-20260904T144308615Z-41278-d003ac403e77.json"
+}

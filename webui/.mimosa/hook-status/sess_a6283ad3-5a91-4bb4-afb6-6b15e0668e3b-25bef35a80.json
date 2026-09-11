@@ -1,0 +1,14 @@
+{
+  "schemaVersion": "mimosa-hook-status/v1",
+  "recordedAt": "2026-09-05T03:09:57.739Z",
+  "sessionId": "sess_a6283ad3-5a91-4bb4-afb6-6b15e0668e3b",
+  "event": "PostToolUse",
+  "toolName": "Edit",
+  "file": "/Users/allengaller/Documents/GitHub/allengaller/open-arch/tests/unit/test_skills_format.py",
+  "outcome": "inconclusive",
+  "coverage": "partial",
+  "findingCount": 0,
+  "durationMs": 11,
+  "hostState": "hook_complete",
+  "reportHint": ".mimosa/reports/"
+}

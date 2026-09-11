@@ -34,7 +34,7 @@ OpenArch 是面向 SA 的开源工具箱与职业提升平台，核心命题是*
 
 ## Capabilities and Constraints
 
-- MVP 能力：第一张工作单「架构设计」五步链路；六个技能包（arch-design / aliyun-waf / sa-playbooks / cloud-frameworks / sa-concepts / cloud-sa-playbook）；五个结构化工具（structure_requirements、validate_diagram、export_drawio、review_with_waf、export_deliverable）；Web 控制台三区布局 + 知识库视图（技能包 Markdown 正文浏览）。
+- MVP 能力：第一张工作单「架构设计」五步链路；八个技能包（arch-design / aliyun-waf / sa-playbooks / cloud-frameworks / sa-concepts / cloud-sa-playbook / sa-perspectives / sa-strategy）；五个结构化工具（structure_requirements、validate_diagram、export_drawio、review_with_waf、export_deliverable）；Web 控制台三区布局 + 知识库视图（技能包 Markdown 正文浏览）。
 - 技术约束：Python ≥ 3.11；AgentScope 2.0（`Agent`/`Toolkit`/`launch_console` API）；Web 模式使用 SQLite（启动幂等种子，无用户系统）；终端聊天与浏览器控制台双入口。
 - 路线图（页面叙事不得当作现有能力）：售前其余工作单闭环（客户洞察 / PoC 验证 / 投标支持 / 交付复盘——获客打法知识已在 cloud-sa-playbook）、学习路径与技能树、Web UI 产品化（多用户与账号体系）、客户管理与交付沉淀、Runtime 容器化多用户部署、多云知识包扩充（AWS/Azure 选型）。
 - Non-Goals：多租户/鉴权、自建持久化、SOP 执行引擎（路线图之外不做承诺）。

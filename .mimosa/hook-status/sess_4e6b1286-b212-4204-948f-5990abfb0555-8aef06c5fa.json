@@ -1,0 +1,14 @@
+{
+  "schemaVersion": "mimosa-hook-status/v1",
+  "recordedAt": "2026-09-05T10:22:03.893Z",
+  "sessionId": "sess_4e6b1286-b212-4204-948f-5990abfb0555",
+  "event": "PostToolUse",
+  "toolName": "Edit",
+  "file": "/Users/allengaller/.zcode/cli/memories/projects/open-arch-20a68c0011758454/memory/MEMORY.md",
+  "outcome": "clear",
+  "coverage": "complete",
+  "findingCount": 0,
+  "durationMs": 6,
+  "hostState": "hook_complete",
+  "reportHint": ".mimosa/reports/"
+}

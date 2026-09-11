@@ -12,6 +12,8 @@ EXPECTED = {
     "cloud-frameworks",
     "sa-concepts",
     "cloud-sa-playbook",
+    "sa-perspectives",
+    "sa-strategy",
 }
 
 
@@ -71,6 +73,18 @@ def test_referenced_content_files_exist():
             "content/self-playbook.md",
             "content/internal-process.md",
             "checklist.yaml",
+        },
+        "sa-perspectives": {
+            "content/customer-views.md",
+            "content/sa-team-views.md",
+            "content/sales-views.md",
+            "content/product-views.md",
+            "content/service-views.md",
+        },
+        "sa-strategy": {
+            "content/strategy-framework.md",
+            "content/deal-strategy.md",
+            "content/account-strategy.md",
         },
     }
     for name, files in expected_content.items():
