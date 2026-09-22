@@ -10,7 +10,30 @@ def test_defaults_with_dashscope_key():
     assert s.model == "qwen-max"
     assert s.base_url is None
     assert s.workspace.name == "deliverables"
-    assert s.dashscope_api_key == DUMMY_VALUE
+    assert s.dashscope_api_key is not None
+    assert s.dashscope_api_key.get_secret_value() == DUMMY_VALUE
+
+
+def test_secret_keys_not_leaked_by_repr():
+    # SecretStr 加固：settings 被意外打印/记日志时 key 只显掩码。
+    s = load_settings(
+        env={
+            "DASHSCOPE_API_KEY": DUMMY_VALUE,
+            "OPENARCH_BASE_URL": "http://localhost:8000/v1",
+            "OPENARCH_API_KEY": DUMMY_VALUE,
+        }
+    )
+    assert DUMMY_VALUE not in repr(s)
+    assert DUMMY_VALUE not in str(s.dashscope_api_key)
+    assert s.dashscope_api_key.get_secret_value() == DUMMY_VALUE
+    assert s.openai_api_key is not None
+    assert s.openai_api_key.get_secret_value() == DUMMY_VALUE
+
+
+def test_invalid_port_raises_config_error():
+    with pytest.raises(ConfigError) as exc:
+        load_settings(env={"DASHSCOPE_API_KEY": DUMMY_VALUE, "OPENARCH_PORT": "abc"})
+    assert "OPENARCH_PORT" in str(exc.value)
 
 
 def test_missing_key_raises_with_guidance():
@@ -30,7 +53,8 @@ def test_base_url_switches_to_openai_compatible():
         }
     )
     assert s.base_url == "http://localhost:8000/v1"
-    assert s.openai_api_key == DUMMY_VALUE
+    assert s.openai_api_key is not None
+    assert s.openai_api_key.get_secret_value() == DUMMY_VALUE
     assert s.model == "my-model"
 
 

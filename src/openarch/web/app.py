@@ -3,7 +3,7 @@ from __future__ import annotations
 import json
 import logging
 from pathlib import Path
-from typing import Any
+from typing import Any, TypedDict
 
 import yaml
 from agentscope.app import create_app
@@ -22,6 +22,8 @@ logger = logging.getLogger(__name__)
 _SKILL_TEXT_SUFFIXES = {".md", ".yaml", ".yml"}
 
 # 候选顺序：包内（Docker 构建产物）优先，仓库内（本地 npm run build）兜底。
+# parents[3] 仅在源码运行（src/openarch/web/app.py → 仓库根）时存在，
+# wheel/容器安装后该候选自然探测失败，落到包内路径。
 _STATIC_CANDIDATES = (
     Path(__file__).parent / "static" / "dist",
     Path(__file__).parents[3] / "webui" / "dist",
@@ -119,6 +121,12 @@ class _MaskCredentialKeysMiddleware:
         await self.app(scope, receive, send_masked)
 
 
+class _OpenArchConfig(TypedDict):
+    """GET /openarch/config 的响应契约（前端启动引导用，不含任何密钥）。"""
+
+    model: str
+
+
 def create_web_app(settings: Settings) -> FastAPI:
     """装配 AgentScope Agent Service 并叠加 OpenArch 私有端点与静态托管。"""
     workspace_manager = LocalWorkspaceManager(
@@ -135,7 +143,7 @@ def create_web_app(settings: Settings) -> FastAPI:
     app.add_middleware(_MaskCredentialKeysMiddleware)
 
     @app.get("/openarch/config")
-    def openarch_config() -> dict:
+    def openarch_config() -> _OpenArchConfig:
         """前端启动引导所需的服务端配置（不含任何密钥）。"""
         return {"model": settings.model}
 

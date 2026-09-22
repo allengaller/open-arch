@@ -57,13 +57,13 @@ async def _seed_credential(storage: AsyncSQLAlchemyStorage, settings: Settings) 
     if settings.base_url:
         credential: CredentialBase = OpenAICredential(
             id=_CREDENTIAL_ID,
-            api_key=SecretStr(settings.openai_api_key or ""),
+            api_key=settings.openai_api_key or SecretStr(""),
             base_url=settings.base_url,
         )
     else:
         credential = DashScopeCredential(
             id=_CREDENTIAL_ID,
-            api_key=SecretStr(settings.dashscope_api_key or ""),
+            api_key=settings.dashscope_api_key or SecretStr(""),
         )
     return await storage.upsert_credential(USER_ID, credential)
 

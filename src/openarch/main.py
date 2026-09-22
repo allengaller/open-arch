@@ -39,7 +39,8 @@ def _run_web(settings: Settings, host: str | None, port: int | None) -> None:
             "构建方法见 README「Web UI」一节。",
             file=sys.stderr,
         )
-    print(f"OpenArch Web 就绪：http://{host}:{port}（模型：{settings.model}）")
+    # 端口尚未绑定，用「启动中」措辞；绑定成功后 uvicorn 自身会打印监听地址。
+    print(f"OpenArch Web 启动中：http://{host}:{port}（模型：{settings.model}）")
     uvicorn.run(create_web_app(settings), host=host, port=port)
 
 
@@ -50,6 +51,9 @@ def main() -> None:
         settings = load_settings()
     except ConfigError as e:
         print(f"配置错误：{e}", file=sys.stderr)
+        sys.exit(1)
+    except Exception as e:  # noqa: BLE001 — CLI 入口兜底：拒绝裸 traceback，给可操作提示
+        print(f"启动失败：{e}", file=sys.stderr)
         sys.exit(1)
 
     if args.command == "web":

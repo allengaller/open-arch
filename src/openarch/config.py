@@ -4,6 +4,8 @@ import os
 from dataclasses import dataclass
 from pathlib import Path
 
+from pydantic import SecretStr
+
 _DEFAULT_MODEL = "qwen-max"
 
 
@@ -13,8 +15,8 @@ class ConfigError(RuntimeError):
 
 @dataclass(frozen=True)
 class Settings:
-    dashscope_api_key: str | None
-    openai_api_key: str | None
+    dashscope_api_key: SecretStr | None
+    openai_api_key: SecretStr | None
     base_url: str | None
     model: str
     workspace: Path
@@ -54,15 +56,22 @@ def load_settings(env: dict[str, str] | None = None) -> Settings:
     db = Path(e.get("OPENARCH_DB") or "./data/openarch.db").expanduser().resolve()
     db.parent.mkdir(parents=True, exist_ok=True)
     web_port_raw = e.get("OPENARCH_PORT")
+    try:
+        web_port = int(web_port_raw) if web_port_raw else 8000
+    except ValueError:
+        raise ConfigError(
+            f"OPENARCH_PORT 不是合法整数：{web_port_raw!r}。"
+            "请改为数字端口（如 8000），或删除该变量使用默认值。"
+        ) from None
 
     return Settings(
-        dashscope_api_key=dashscope_key,
-        openai_api_key=openai_key,
+        dashscope_api_key=SecretStr(dashscope_key) if dashscope_key else None,
+        openai_api_key=SecretStr(openai_key) if openai_key else None,
         base_url=base_url,
         model=e.get("OPENARCH_MODEL") or _DEFAULT_MODEL,
         workspace=workspace,
         skills_dir=skills_dir,
         db=db,
         web_host=e.get("OPENARCH_HOST") or "127.0.0.1",
-        web_port=int(web_port_raw) if web_port_raw else 8000,
+        web_port=web_port,
     )
