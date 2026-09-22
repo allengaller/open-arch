@@ -36,6 +36,13 @@ def test_invalid_port_raises_config_error():
     assert "OPENARCH_PORT" in str(exc.value)
 
 
+@pytest.mark.parametrize("port", ["-1", "99999"])
+def test_out_of_range_port_raises_config_error(port):
+    with pytest.raises(ConfigError) as exc:
+        load_settings(env={"DASHSCOPE_API_KEY": DUMMY_VALUE, "OPENARCH_PORT": port})
+    assert "OPENARCH_PORT" in str(exc.value)
+
+
 def test_missing_key_raises_with_guidance():
     with pytest.raises(ConfigError) as exc:
         load_settings(env={})

@@ -63,6 +63,11 @@ def load_settings(env: dict[str, str] | None = None) -> Settings:
             f"OPENARCH_PORT 不是合法整数：{web_port_raw!r}。"
             "请改为数字端口（如 8000），或删除该变量使用默认值。"
         ) from None
+    if not 0 <= web_port <= 65535:
+        raise ConfigError(
+            f"OPENARCH_PORT 超出合法范围 0-65535：{web_port_raw!r}。"
+            "请改为数字端口（如 8000）。"
+        )
 
     return Settings(
         dashscope_api_key=SecretStr(dashscope_key) if dashscope_key else None,

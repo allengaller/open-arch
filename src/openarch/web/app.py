@@ -66,10 +66,16 @@ def _skill_meta(skill_dir: Path) -> dict | None:
 
 
 def _mask_api_keys(node: Any) -> Any:
-    """递归把响应里所有 api_key 字段替换为掩码（长度信息也不保留）。"""
+    """递归把响应里所有 api_key 标量值替换为掩码（长度信息也不保留）。
+
+    api_key 键为 dict/list 时是结构定义而非密钥值（如 /credential/schemas
+    的 JSON Schema），保持原样下钻，避免破坏 API 契约。
+    """
     if isinstance(node, dict):
         return {
-            k: "***" if k == "api_key" else _mask_api_keys(v)
+            k: "***"
+            if k == "api_key" and not isinstance(v, (dict, list))
+            else _mask_api_keys(v)
             for k, v in node.items()
         }
     if isinstance(node, list):
@@ -114,7 +120,9 @@ class _MaskCredentialKeysMiddleware:
                 for k, v in start_message["headers"]
                 if k.lower() != b"content-length"
             ]
-            headers.append((b"content-length", str(len(masked)).encode()))
+            # RFC 7230 §3.3.2：204 响应不得携带 Content-Length。
+            if start_message["status"] != 204:
+                headers.append((b"content-length", str(len(masked)).encode()))
             await send({**start_message, "headers": headers})
             await send({"type": "http.response.body", "body": masked})
 

@@ -132,3 +132,47 @@ async def test_masking_middleware_passes_through_other_routes(tmp_path):
         assert r.status_code == 200
         assert r.json() == {"model": "qwen-max"}
 
+
+async def test_masking_preserves_credential_schemas(tmp_path):
+    # GET /credential/schemas 里的 api_key 是 JSON Schema 定义对象（type: string、
+    # format: password）而非密钥值；掩码只作用于标量值，否则凭证表单拿到的契约被破坏。
+    from openarch.web.bootstrap import run_bootstrap
+
+    s = _settings(tmp_path)
+    await run_bootstrap(s)
+    app = create_web_app(s)
+    with TestClient(app) as client:
+        r = client.get("/credential/schemas", headers={"x-user-id": "local"})
+        assert r.status_code == 200
+
+        def walk(node):
+            if isinstance(node, dict):
+                yield node
+                for v in node.values():
+                    yield from walk(v)
+            elif isinstance(node, list):
+                for v in node:
+                    yield from walk(v)
+
+        schemas = [d["api_key"] for d in walk(r.json()) if "api_key" in d]
+        assert schemas, "响应中应存在 api_key 的 schema 定义"
+        assert all(
+            isinstance(v, dict) and v.get("type") == "string" for v in schemas
+        ), f"schema 定义对象不得被掩码：{schemas}"
+
+
+async def test_masking_middleware_omits_content_length_on_204(tmp_path):
+    # RFC 7230 §3.3.2：204 响应不得携带 Content-Length；middleware 重算头时要跳过。
+    from openarch.web.bootstrap import run_bootstrap
+
+    s = _settings(tmp_path)
+    await run_bootstrap(s)
+    app = create_web_app(s)
+    with TestClient(app) as client:
+        lst = client.get("/credential/", headers={"x-user-id": "local"})
+        assert lst.status_code == 200
+        cred_id = lst.json()["credentials"][0]["id"]
+        r = client.delete(f"/credential/{cred_id}", headers={"x-user-id": "local"})
+        assert r.status_code == 204
+        assert "content-length" not in r.headers
+
