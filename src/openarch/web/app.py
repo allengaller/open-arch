@@ -1,7 +1,9 @@
 from __future__ import annotations
 
+import json
 import logging
 from pathlib import Path
+from typing import Any
 
 import yaml
 from agentscope.app import create_app
@@ -61,6 +63,62 @@ def _skill_meta(skill_dir: Path) -> dict | None:
     return {"name": skill_dir.name, "description": str(meta.get("description", "")), "files": files}
 
 
+def _mask_api_keys(node: Any) -> Any:
+    """递归把响应里所有 api_key 字段替换为掩码（长度信息也不保留）。"""
+    if isinstance(node, dict):
+        return {
+            k: "***" if k == "api_key" else _mask_api_keys(v)
+            for k, v in node.items()
+        }
+    if isinstance(node, list):
+        return [_mask_api_keys(v) for v in node]
+    return node
+
+
+class _MaskCredentialKeysMiddleware:
+    """纯 ASGI middleware：/credential* 响应中的 api_key 统一掩码。
+
+    agentscope 的凭证端点会原样回显存储的明文 key；只拦 credential 前缀、
+    其余请求（含 SSE 流式端点）原样透传，避免通用 middleware 的缓冲副作用。
+    """
+
+    def __init__(self, app: Any) -> None:
+        self.app = app
+
+    async def __call__(self, scope: Any, receive: Any, send: Any) -> None:
+        if scope["type"] != "http" or not scope["path"].startswith("/credential"):
+            await self.app(scope, receive, send)
+            return
+
+        start_message: dict | None = None
+        body_parts: list[bytes] = []
+
+        async def send_masked(message: dict) -> None:
+            nonlocal start_message
+            if message["type"] == "http.response.start":
+                start_message = message
+                return
+            body_parts.append(message.get("body", b""))
+            if message.get("more_body"):
+                return
+            raw = b"".join(body_parts)
+            try:
+                masked = json.dumps(_mask_api_keys(json.loads(raw))).encode()
+            except (ValueError, UnicodeDecodeError):
+                masked = raw
+            assert start_message is not None
+            headers = [
+                (k, v)
+                for k, v in start_message["headers"]
+                if k.lower() != b"content-length"
+            ]
+            headers.append((b"content-length", str(len(masked)).encode()))
+            await send({**start_message, "headers": headers})
+            await send({"type": "http.response.body", "body": masked})
+
+        await self.app(scope, receive, send_masked)
+
+
 def create_web_app(settings: Settings) -> FastAPI:
     """装配 AgentScope Agent Service 并叠加 OpenArch 私有端点与静态托管。"""
     workspace_manager = LocalWorkspaceManager(
@@ -74,6 +132,7 @@ def create_web_app(settings: Settings) -> FastAPI:
         extra_agent_tools=make_openarch_tools(settings, workspace_manager),
         title="OpenArch",
     )
+    app.add_middleware(_MaskCredentialKeysMiddleware)
 
     @app.get("/openarch/config")
     def openarch_config() -> dict:

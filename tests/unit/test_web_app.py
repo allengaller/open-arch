@@ -93,3 +93,42 @@ def test_static_candidates_shape():
     assert _STATIC_CANDIDATES[1].name == "dist"
     assert _STATIC_CANDIDATES[1].parent.name == "webui"
 
+
+async def test_credential_response_masks_api_key(tmp_path):
+    # agentscope 的 /credential/ 会原样回显存储的 api_key；OpenArch 在装配层
+    # 统一掩码，保证明文 key 永不出服务端（手动验收清单第 8 项）。
+    from openarch.web.bootstrap import run_bootstrap
+
+    s = _settings(tmp_path)
+    await run_bootstrap(s)
+    app = create_web_app(s)
+    with TestClient(app) as client:
+        r = client.get("/credential/", headers={"x-user-id": "local"})
+        assert r.status_code == 200
+        assert DUMMY_VALUE not in r.text, "明文 key 不得出现在凭证响应中"
+
+        def walk(node):
+            if isinstance(node, dict):
+                yield node
+                for v in node.values():
+                    yield from walk(v)
+            elif isinstance(node, list):
+                for v in node:
+                    yield from walk(v)
+
+        api_keys = [d["api_key"] for d in walk(r.json()) if "api_key" in d]
+        assert api_keys == ["***"], f"api_key 应被掩码，实际：{api_keys}"
+
+
+async def test_masking_middleware_passes_through_other_routes(tmp_path):
+    # 掩码 middleware 只拦 /credential*：其余端点（含 SSE 类路径）不受缓冲影响。
+    from openarch.web.bootstrap import run_bootstrap
+
+    s = _settings(tmp_path)
+    await run_bootstrap(s)
+    app = create_web_app(s)
+    with TestClient(app) as client:
+        r = client.get("/openarch/config")
+        assert r.status_code == 200
+        assert r.json() == {"model": "qwen-max"}
+
