@@ -52,4 +52,19 @@ describe('applyEvent', () => {
     const s = applyEvent(emptyChatState(), { type: 'SOMETHING_NEW_IN_V3' })
     expect(s.bubbles).toHaveLength(0)
   })
+
+  it('纯函数：不修改传入 state，相同输入产生相同输出', () => {
+    // React setState updater 会被 StrictMode double-invoke；就地 mutate 会把
+    // 流式 delta 拼两遍、且同引用返回触发 bail-out 不重渲染。
+    const s0 = emptyChatState()
+    const s1 = applyEvent(s0, { type: 'REPLY_START', reply_id: 'r1' })
+    const ev = { type: 'TEXT_BLOCK_DELTA', reply_id: 'r1', delta: 'A' }
+    const a = applyEvent(s1, ev)
+    const b = applyEvent(s1, ev)
+    expect(s0.bubbles).toHaveLength(0)
+    expect(s1.bubbles[0].text).toBe('')
+    expect(a).toEqual(b)
+    expect(a).not.toBe(s1)
+    expect(a.bubbles[0].text).toBe('A')
+  })
 })

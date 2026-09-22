@@ -21,11 +21,20 @@ export function emptyChatState(): ChatStreamState {
   return { bubbles: [] }
 }
 
-function upsertBubble(state: ChatStreamState, replyId: string): Bubble {
-  let b = state.bubbles.find((x) => x.replyId === replyId)
+function cloneState(state: ChatStreamState): ChatStreamState {
+  return {
+    bubbles: state.bubbles.map((b) => ({
+      ...b,
+      tools: b.tools.map((t) => ({ ...t })),
+    })),
+  }
+}
+
+function upsertBubble(bubbles: Bubble[], replyId: string): Bubble {
+  let b = bubbles.find((x) => x.replyId === replyId)
   if (!b) {
     b = { replyId, text: '', thinking: '', tools: [], done: false }
-    state.bubbles.push(b)
+    bubbles.push(b)
   }
   return b
 }
@@ -41,6 +50,8 @@ function upsertTool(bubble: Bubble, toolCallId: string, name?: string): ToolEntr
   return t
 }
 
+// 纯函数：先克隆再更新——React setState updater 会被 StrictMode double-invoke，
+// 就地 mutate 会把 delta 拼两遍；返回新引用也避免 setState bail-out 不重渲染。
 // 宽容解析：未知 type 一律忽略——AgentScope 升级新增事件类型时前端不炸。
 export function applyEvent(
   state: ChatStreamState,
@@ -48,27 +59,28 @@ export function applyEvent(
 ): ChatStreamState {
   const type = ev['type'] as string | undefined
   const replyId = (ev['reply_id'] as string | undefined) ?? 'unknown'
+  const bubbles = cloneState(state).bubbles
   switch (type) {
     case 'REPLY_START':
-      upsertBubble(state, replyId)
+      upsertBubble(bubbles, replyId)
       break
     case 'TEXT_BLOCK_START': {
-      const b = upsertBubble(state, replyId)
+      const b = upsertBubble(bubbles, replyId)
       if (b.text !== '') b.text += '\n\n'
       break
     }
     case 'TEXT_BLOCK_DELTA': {
-      const b = upsertBubble(state, replyId)
+      const b = upsertBubble(bubbles, replyId)
       b.text += (ev['delta'] as string | undefined) ?? ''
       break
     }
     case 'THINKING_BLOCK_DELTA': {
-      const b = upsertBubble(state, replyId)
+      const b = upsertBubble(bubbles, replyId)
       b.thinking += (ev['delta'] as string | undefined) ?? ''
       break
     }
     case 'TOOL_CALL_START': {
-      const b = upsertBubble(state, replyId)
+      const b = upsertBubble(bubbles, replyId)
       upsertTool(
         b,
         (ev['tool_call_id'] as string | undefined) ?? '',
@@ -77,20 +89,20 @@ export function applyEvent(
       break
     }
     case 'TOOL_RESULT_TEXT_DELTA': {
-      const b = upsertBubble(state, replyId)
+      const b = upsertBubble(bubbles, replyId)
       const t = upsertTool(b, (ev['tool_call_id'] as string | undefined) ?? '')
       t.resultText += (ev['delta'] as string | undefined) ?? ''
       break
     }
     case 'TOOL_CALL_END':
     case 'TOOL_RESULT_END': {
-      const b = upsertBubble(state, replyId)
+      const b = upsertBubble(bubbles, replyId)
       const t = upsertTool(b, (ev['tool_call_id'] as string | undefined) ?? '')
       t.done = true
       break
     }
     case 'REPLY_END': {
-      const b = upsertBubble(state, replyId)
+      const b = upsertBubble(bubbles, replyId)
       b.done = true
       break
     }
@@ -98,7 +110,7 @@ export function applyEvent(
       // 心跳注释帧、未知类型：忽略
       break
   }
-  return state
+  return { bubbles }
 }
 
 // ---- 传输层（fetch 式 SSE：EventSource 无法带 X-User-ID 头）----
