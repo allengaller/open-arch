@@ -7,6 +7,10 @@ deliverables/
 .ruff_cache/
 dist/
 .impeccable/
+.mimosa/
+.v2c/
+.video_agent/
+.DS_Store
 webui/dist/
 data/
 *.db
