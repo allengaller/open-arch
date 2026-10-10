@@ -26,8 +26,10 @@ export function ChatPane({ ctx, session, onSessionsChanged }: Props) {
   const bottomRef = useRef<HTMLDivElement>(null)
 
   // 选中会话：载历史 + 订阅事件流（断线 1.5s 后重连，服务端会先回放缓冲）
+  // 依赖取 session?.id：会话标题等在同一个 id 上的字段刷新不应重订阅
+  const sessionId = session?.id
   useEffect(() => {
-    if (!session) return
+    if (!sessionId) return
     let cancelled = false
     let retryTimer: ReturnType<typeof setTimeout> | undefined
     setHistory([])
@@ -36,7 +38,7 @@ export function ChatPane({ ctx, session, onSessionsChanged }: Props) {
     setRunning(false)
     ;(async () => {
       try {
-        const m = await api.listMessages(ctx.agentId, session.id)
+        const m = await api.listMessages(ctx.agentId, sessionId)
         if (!cancelled) setHistory(m.messages as HistoryMsg[])
       } catch (e) {
         if (!cancelled) setError(String(e))
@@ -46,7 +48,7 @@ export function ChatPane({ ctx, session, onSessionsChanged }: Props) {
     const pump = () => {
       streamSessionEvents(
         ctx.agentId,
-        session.id,
+        sessionId,
         {
           onEvent: (ev) => {
             if (cancelled) return
@@ -71,7 +73,7 @@ export function ChatPane({ ctx, session, onSessionsChanged }: Props) {
       if (retryTimer) clearTimeout(retryTimer)
       ctrl.abort()
     }
-  }, [session?.id, ctx, onSessionsChanged])
+  }, [sessionId, ctx, onSessionsChanged])
 
   // 全部 live 气泡完成后对账：以服务端持久化历史为准，清空实时态
   useEffect(() => {

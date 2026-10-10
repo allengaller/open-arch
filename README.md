@@ -12,7 +12,7 @@ OpenArch 的对外门面 —— 完整介绍产品定位、三类用户、售前
 
 - 本地打开：直接用浏览器打开仓库内的 [`GTM/index.html`](./GTM/index.html)（无依赖，纯静态）
 - GitHub Pages（启用 Pages 后）：<https://allengaller.github.io/open-arch/GTM/>
-- 设计语言：纸白 + 墨黑 + 朱砂红三色，连续规则线表单拓扑；详见 [DESIGN.md](./DESIGN.md)
+- 设计语言：冷纸白 + 深墨蓝 + 企业蓝三色（朱砂红收窄为危险/错误语义），企业交付控制台版式；详见 [DESIGN.md](./DESIGN.md)
 
 > 两条不同的浏览器面：这里的 **GTM 营销页** 是静态定位 deck；下方的 **Web UI** 是 `uv run openarch web` 起的运行时产品控制台。
 

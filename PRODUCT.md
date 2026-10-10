@@ -47,8 +47,9 @@ OpenArch 是面向 SA 的开源工具箱与职业提升平台，核心命题是*
 
 ## Evidence on Hand
 
-- 已批准的 MVP 设计规格：`docs/superpowers/specs/2026-08-28-openarch-sa-platform-design.md`（与需求方逐节确认）。
-- 实施进行中：`src/openarch/`（环境配置、Mermaid flowchart 校验器等）、`tests/`（git log 可见进度）；实施计划见 `docs/superpowers/plans/2026-08-28-openarch-mvp.md`。
+- 已批准的 MVP 与 Phase 2 Web UI 设计规格：`docs/superpowers/specs/`（与需求方逐节确认）；对应实施计划 `docs/superpowers/plans/`（两份计划共 26 个任务已全部落地）。
+- 已交付：`src/openarch/`（配置自检、五个结构化工具、Mermaid/draw.io 纯逻辑、终端 CLI、Web 装配与幂等种子）、`webui/`（三区控制台 + 知识库视图 + 无后端演示模式）、`skills/` 八个技能包。后端单测与前端纯逻辑测试由 CI 在 Python 3.11 / 3.12 双版本把关；Docker 多阶段镜像一并构建前端产物。
+- 真实 Key 的 e2e 冒烟（终端与 Web 各一条）保留在 `tests/e2e/`，标记 `e2e` 不进 CI，需手动执行。
 - 无：用户数据、star 数、客户案例、第三方测评、价格、团队背书。页面不得虚构上述证据；示例对话/交付物可自制，但须明确标注为演示。
 
 ## Product Principles
