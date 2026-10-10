@@ -3,7 +3,7 @@ from __future__ import annotations
 import json
 import logging
 from pathlib import Path
-from typing import Any, TypedDict
+from typing import Any
 
 import yaml
 from agentscope.app import create_app
@@ -11,6 +11,7 @@ from agentscope.app.message_bus import InMemoryMessageBus
 from agentscope.app.workspace_manager import LocalWorkspaceManager
 from fastapi import FastAPI, HTTPException, Response
 from fastapi.staticfiles import StaticFiles
+from typing_extensions import TypedDict
 
 from openarch.config import Settings
 from openarch.web.bootstrap import make_storage

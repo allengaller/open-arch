@@ -1694,6 +1694,7 @@ dependencies = [
     { name = "pydantic" },
     { name = "python-dotenv" },
     { name = "pyyaml" },
+    { name = "typing-extensions" },
 ]
 
 [package.dev-dependencies]
@@ -1710,6 +1711,7 @@ requires-dist = [
     { name = "pydantic", specifier = ">=2.7" },
     { name = "python-dotenv", specifier = ">=1.0" },
     { name = "pyyaml", specifier = ">=6.0" },
+    { name = "typing-extensions", specifier = ">=4.7" },
 ]
 
 [package.metadata.requires-dev]
