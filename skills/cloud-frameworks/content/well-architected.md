@@ -2,6 +2,8 @@
 
 > WAF 回答"**这个技术架构对不对**"。CAF 管"怎么组织和实施转型"（人/流程），WAF 管"Workload 的技术质量"（架构支柱）——两者配合使用：CAF 定战略与治理，WAF 评审每一个 Workload。
 >
+> 阿里云官方框架细节（现行支柱命名、设计原则原文、AI Lens、评估工具、白皮书索引）见本包 `aliyun-waf-official.md`（2026-10 全网调研档案）。
+>
 > 本项目内逐项评审工具见 `aliyun-waf` 技能包（checklist.yaml 五支柱清单），本篇是方法论与知识底座，两包配套使用。
 
 ## 1. AWS Well-Architected 六支柱
@@ -82,15 +84,19 @@
 
 ## 2. 阿里云 Well-Architected（卓越架构）五支柱
 
-阿里云官方框架为五支柱：**可靠性、安全性、成本优化、性能效率、运维**（对应 AWS 的六支柱，未单列可持续性，将卓越运营译作"运维"）。
+官方框架为五支柱，**2025-07 文档重构后的现行命名：安全、稳定、成本、效率、性能**（2023 白皮书全称：安全合规/稳定性/成本优化/卓越运营/高效性能）。⚠️ 注意命名错位：**"效率"对应英文 Operational Excellence（卓越运营），"性能"对应 Performance Efficiency**——与 AWS 六支柱中文名直译恰好错位。无可持续性支柱；2026-09-20 新增的是 **AI 卓越架构（AI Lens）**——五大支柱之上的 AI 场景专项指引，不是第六支柱。
 
-| 阿里云支柱 | 对应 AWS 支柱 | 本项目机读清单 |
+| 阿里云支柱（现行官方名） | 对应 AWS 支柱 | 本项目机读清单 |
 |---|---|---|
-| 可靠性 REL | Reliability | REL-01~05（跨 AZ、健康检查、RPO/RTO、演练、降级熔断） |
-| 安全性 SEC | Security | SEC-01~05（最小权限、边界防护、加密、审计、补丁） |
-| 成本优化 COST | Cost Optimization | COST-01~05（规格匹配、计费模式、存储分层、可见性、弹性） |
-| 性能效率 PERF | Performance Efficiency | PERF-01~05（容量模型、缓存、读写分离、异步、压测） |
-| 运维 OPS | Operational Excellence | OPS-01~05（IaC、CI/CD、可观测、on-call、复盘） |
+| 安全 SEC | Security | SEC-01~05（最小权限、边界防护、加密、审计、补丁） |
+| 稳定 REL | Reliability | REL-01~05（跨 AZ、健康检查、RPO/RTO、演练、降级熔断） |
+| 成本 COST | Cost Optimization | COST-01~05（规格匹配、计费模式、存储分层、可见性、弹性） |
+| 效率 OPS | Operational Excellence | OPS-01~05（IaC、CI/CD、可观测、on-call、复盘） |
+| 性能 PERF | Performance Efficiency | PERF-01~05（容量模型、缓存、读写分离、异步、压测） |
+
+> `aliyun-waf` 的 checklist.yaml 键名沿用旧译（可靠性/安全性/成本优化/性能效率/运维），条目 ID（REL/SEC/COST/PERF/OPS）与官方支柱一一对应，评审时按官方名对外表述。
+
+官方评审方法论为"**学习 → 度量 → 优化**"三阶段 + 双轨度量（主观：Well-Architected Tool 自助问答；客观：云治理中心免费成熟度检测，260+ 项指标）；官方逐支柱设计原则原文、AI Lens、白皮书族谱见本包 `aliyun-waf-official.md`（2026-10 调研档案）。HRI/MRI 术语源自 AWS Well-Architected Review，本项目沿用属项目内约定。
 
 评审操作规程（打分、evidence、fail 项处置）见 `aliyun-waf/SKILL.md`。
 

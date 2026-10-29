@@ -3,7 +3,7 @@
 pillars:
   账号体系:
     - {id: ACCT-01, description: 已启用资源目录（RD），业务资源集中在成员账号，管理账号无业务资源}
-    - {id: ACCT-02, description: 资源夹按业务线/环境划分（Core/Security/Log/Suspended），账号命名与开户规范明确}
+    - {id: ACCT-02, description: 资源夹符合官方现行 Core + Applications 结构（安全/日志/财务等核心账号置于 Core），账号命名与开户规范明确}
     - {id: ACCT-03, description: 生产与非生产资源隔离在不同账号，误操作影响面有边界}
     - {id: ACCT-04, description: 可信服务已配置委派管理员，管理账号仅承担管控职能}
   身份权限:

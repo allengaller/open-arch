@@ -1,4 +1,5 @@
 # 阿里云 Well-Architected Framework 五支柱检查清单（公开文档整理，MVP 精简版）
+# 官方现行支柱命名为：安全 / 稳定 / 成本 / 效率 / 性能（效率=Operational Excellence）；本清单键名沿用旧译，条目 ID 与官方支柱一一对应
 pillars:
   可靠性:
     - {id: REL-01, description: 关键应用跨可用区部署，无单可用区故障风险}
